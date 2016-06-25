@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">Aleksandr Andreichenko</string>
+
+
+
+    <string name="hint_phone">Mobile handy</string>
+    <string name="hint_email">E-mail</string>
+    <string name="hint_github">Repository</string>
+    <string name="hint_vk">Profile in vk</string>
+    <string name="hint_about_me">Uber sich</string>
+    <string name="text_phone">+4(3324)212-820-22</string>
+    <string name="text_email">andreichenko@dmail.de</string>
+    <string name="text_github">github.com/name/DevIntensive</string>
+    <string name="text_vk">vk.com/andrejtschenko</string>
+    <string name="text_about_me">About you//Uber sich schrieben bitte wenige text.Guten Tag, herzlich willkommen in meinem Android app. Ich wuensche ihnen einen
+    wunderscheonen Tag. Immer Ihr. Alex</string>
 </resources>
