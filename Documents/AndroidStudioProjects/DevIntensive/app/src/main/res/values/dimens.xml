@@ -43,6 +43,8 @@
     <dimen name="right_medial_margin_24">24dp</dimen>
     <dimen name="right_medium_margin_32">32dp</dimen>
     <dimen name="right_large_margin_72">72dp</dimen>
+    <dimen name="profile_image_size">256dp</dimen>
+    <dimen name="fab_right_space">16dp</dimen>
 
 
 </resources>
