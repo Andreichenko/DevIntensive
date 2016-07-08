@@ -9,8 +9,11 @@
         <dimen name = "font_large_18">18sp</dimen>
         <dimen name = "font_normal_16">16sp</dimen>
         <dimen name = "font_small_12">12sp</dimen>
+        <dimen name="font_size_22">22sp</dimen>
 
         <!-- Typical spacing between two views -->
+    <dimen name="spacing_small_16">16dp</dimen>
+    <dimen name="spacing_smaller_8">8dp</dimen>
         <dimen name="size_large_72">72dp</dimen>
         <dimen name = "spacing_larger_72">72dp</dimen>
         <dimen name = "spacing_large_56">56dp</dimen>
@@ -19,6 +22,8 @@
         <dimen name = "spacing_normal_16">16dp</dimen>
         <dimen name = "spacing_small_8">8dp</dimen>
         <dimen name = "spacing_tiny_4">4dp</dimen>
+    <dimen name="space_half_normal_size_28">28dp</dimen>
+    <dimen name="size_medium_56">56dp</dimen>
 
         <!-- Typical sizes of views -->
         <dimen name = "button_height_tall_60">60dp</dimen>
@@ -29,6 +34,7 @@
         <dimen name = "line_size_2">2dp</dimen>
         <dimen name = "line_size">1dp</dimen>
         <dimen name= "height_line">72dp</dimen>
+        <dimen name="line_small">1dp</dimen>
 
     <!-- Vertical Line -->
         <dimen name = "vertical_divline_hight">72dp</dimen>
@@ -45,6 +51,11 @@
     <dimen name="right_large_margin_72">72dp</dimen>
     <dimen name="profile_image_size">256dp</dimen>
     <dimen name="fab_right_space">16dp</dimen>
+    <dimen name="placeholder_photo_size_90">90dp</dimen>
+
+    <dimen name="image_size_90">90dp</dimen>
+    <dimen name="margin_56">56dp</dimen>
+    <dimen name="auth_layout_width">256dp</dimen>
 
 
 </resources>

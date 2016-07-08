@@ -68,4 +68,186 @@
         <item name="android:fullDark">@color/grey_dark</item>
     </style>
 
+    <style name="auth_layout_style">
+        <item name="android:layout_gravity">center</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:elevation">12dp</item>
+        <item name="android:padding">@dimen/left_medium_margin_32</item>
+        <item name="android:orientation">vertical</item>
+            </style>
+    <style name="auth_textinput_style">
+        <item name="android:layout_marginTop">@dimen/left_small_margin_16</item>
+        <item name="android:textColorHint">@color/grey_light</item>
+    </style>
+
+    <style name="auth_textfield_style">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:maxLength">30</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+    </style>
+
+    <style name="auth_button">
+        <item name="android:layout_marginTop">@dimen/left_small_margin_16</item>
+        <item name="android:layout_marginLeft">@dimen/left_medium_margin_32</item>
+        <item name="android:layout_marginRight">@dimen/left_medium_margin_32</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:backgroundTint">@color/orange_dark</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="auth_clicktable_textview_style">
+        <item name="android:clickable">true</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/left_small_margin_16</item>
+        <item name="android:gravity">center</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:text">@string/auth.title.forgot_pass</item>
+        <item name="android:textColor">@color/grey_light</item>
+    </style>
+
+
+    <style name="layout_drawer">
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+
+    <style name="draw_layout_style">
+
+        <item name="android:paddingTop">@dimen/spacing_normal_24</item>
+        <item name="android:paddingLeft">@dimen/spacing_small_16</item>
+        <item name="android:paddingRight">@dimen/spacing_small_16</item>
+        <item name="android:paddingBottom">@dimen/spacing_smaller_8</item>
+
+        <item name="android:background">@drawable/header_bg</item>
+    </style>
+
+    <style name="edittext_disabled">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:enabled">false</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:focusable">false</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+    </style>
+
+    <style name="edittext_disabled.phone" parent="edittext_disabled">
+        <item name="android:inputType">number</item>
+        <item name="android:maxLength">20</item>
+    </style>
+
+    <style name="edittext_disabled.email" parent="edittext_disabled">
+        <item name="android:digits">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@.</item>
+    </style>
+
+    <style name="edittext_disabled.profiles" parent="edittext_disabled">
+        <item name="android:digits">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789</item>
+    </style>
+
+
+    <style name="camera_image">
+        <item name="android:layout_width">@dimen/image_size_90</item>
+        <item name="android:layout_height">@dimen/image_size_90</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:src">@drawable/add_a_photo_24px</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_marginBottom">@dimen/margin_56</item>
+    </style>
+
+    <style name="title_placeholder_textview">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_above">@+id/photo_placeholder</item>
+    </style>
+
+    <style name="fab_style">
+        <item name="android:layout_marginRight">@dimen/fab_right_space</item>
+        <item name="android:src">@drawable/ic_send_black_24dp</item>
+    </style>
+
+    <style name="appbar_style">
+        <item name="android:background">@color/ultramarine</item>
+        <item name="android:theme">@style/AppTheme.PopupOverlay</item>
+
+        <item name="android:fitsSystemWindows">true</item>
+    </style>
+
+    <style name="toolbar_style" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:theme">@style/AppTheme.PopupOverlay</item>
+
+        <item name="android:titleTextColor">@color/white</item>
+    </style>
+
+
+    <style name="status_linearlayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingTop">@dimen/space_half_normal_size_28</item>
+        <item name="android:paddingBottom">@dimen/space_half_normal_size_28</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="nav_style">
+        <item name="android:layout_gravity">left</item>
+    </style>
+
+    <style name="status_textview">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+    </style>
+
+    <style name="status_textview.font_size_22">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/font_larger_22</item>
+    </style>
+
+    <style name="view_line">
+        <item name="android:background">@color/gray_light</item>
+    </style>
+
+    <style name="view_line.vertical" parent="view_line">
+        <item name="android:layout_width">@dimen/line_small</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="view_line.horizontal" parent="view_line">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/line_small</item>
+        <item name="android:layout_marginLeft">@dimen/spacing_larger_72</item>
+    </style>
+
+    <style name="main_imageview">
+
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:fitsSystemWindows">true</item>
+    </style>
+
+    <style name="layout_margins">
+                <item name="android:layout_marginTop">@dimen/spacing_smaller_8</item>
+                <item name="android:layout_marginBottom">@dimen/spacing_smaller_8</item>
+                <item name="android:paddingLeft">@dimen/left_small_margin_16</item>
+                <item name="android:paddingRight">@dimen/left_medium_margin_32</item>
+            </style>
+
+    <style name="textinputlayout">
+                <item name="android:layout_width">match_parent</item>
+                <item name="android:layout_height">wrap_content</item>
+                <item name="android:layout_marginLeft">@dimen/left_medium_margin_32</item>
+                <item name="android:layout_marginRight">@dimen/left_small_margin_16</item>
+            </style>
+
+
+
+
+
 </resources>

@@ -12,7 +12,26 @@ import java.util.List;
  */
 public class DevIntensiveAplication extends Application {
 
-    public static SharedPreferences mSharedPreferences;
+    private static SharedPreferences sSharedPreferences;
+
+
+    public static SharedPreferences getSharedPreferences() {
+        return sSharedPreferences;
+
+
+    } @Override
+    public void onCreate() {
+        super.onCreate();
+
+        sSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+    }
+}
+
+
+// TODO: 08.07.16 старый код запомнить 
+
+
+   /* public static SharedPreferences mSharedPreferences;
     
     private static final String[] USER_FIELDS = {ConstantManager.USER_PHONE_KEY, ConstantManager.USER_VK_KEY, ConstantManager.USER_BIO_KEY, ConstantManager.USER_MAIL_KEY, ConstantManager.USER_GIT_KEY};
 
@@ -49,6 +68,6 @@ public class DevIntensiveAplication extends Application {
         userFields.add(mSharedPreferences.getString(ConstantManager.USER_GIT_KEY,null ));
         userFields.add(mSharedPreferences.getString(ConstantManager.USER_BIO_KEY,null ));
         return userFields;
-    }
+    }*/
 
-}
+

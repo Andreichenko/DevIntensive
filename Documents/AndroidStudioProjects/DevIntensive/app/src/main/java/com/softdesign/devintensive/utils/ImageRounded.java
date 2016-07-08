@@ -14,13 +14,64 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 
+import com.squareup.picasso.Transformation;
+
 
 /**
  * Created by AlexFrei on 27.06.16.
  */
-public class ImageRounded extends Drawable{
+public class ImageRounded implements Transformation {
 
-    private final Bitmap mBitmap;
+
+    /**
+     * Трансформирует оригинальную картинку в круглую картинку.
+
+     * @param source ссылка на картинку
+     * @return
+     */
+
+    @Override
+    public Bitmap transform(Bitmap source) {
+        int size = Math.min(source.getWidth(), source.getHeight());
+
+        int x = (source.getWidth() - size) / 2;
+        int y = (source.getHeight() - size) / 2;
+
+
+        Bitmap squaredBitmap = Bitmap.createBitmap(source, x, y, size, size);
+        if (squaredBitmap != source) {
+            source.recycle();
+        }
+
+        Bitmap bitmap = Bitmap.createBitmap(size, size, source.getConfig());
+
+        Canvas canvas = new Canvas(bitmap);
+        Paint paint = new Paint();
+        BitmapShader shader = new BitmapShader(squaredBitmap,
+                BitmapShader.TileMode.CLAMP, BitmapShader.TileMode.CLAMP);
+        paint.setShader(shader);
+        paint.setAntiAlias(true);
+
+
+
+        float r = size / 2f;
+        canvas.drawCircle(r, r, r, paint);
+
+
+        squaredBitmap.recycle();
+        return bitmap;
+    }
+
+
+    @Override
+    public String key() {
+        return "circle";
+    }
+
+}
+// TODO: 08.07.16 старый код исправить 09
+
+    /*private final Bitmap mBitmap;
     private final Paint mPaint;
     private final RectF mRectF;
     private final int mBitmapWidth;
@@ -107,5 +158,5 @@ public ImageRounded (Bitmap bitmap){
 
     }
 
+*/
 
-}
