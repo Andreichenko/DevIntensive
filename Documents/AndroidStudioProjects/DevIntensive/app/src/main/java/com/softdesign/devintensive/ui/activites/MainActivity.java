@@ -50,6 +50,15 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import android.support.v7.widget.ThemedSpinnerAdapter;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 
 import com.softdesign.devintensive.R;
@@ -156,12 +165,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mDataManager = new DataManager();
 
-        List<String> userData = mDataManager.getPreferencesManager().loadUserProfileData();
-        changeTextOnTextView(mEditTexts, userData);
 
-        mTextViews.get(0).setText("42");
-        mTextViews.get(1).setText("2220");
-        mTextViews.get(2).setText("32");
 
         mFab.setOnClickListener(this);
         mProfilePlaceholder.setOnClickListener(this);
@@ -169,7 +173,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         try {
             setupToolbar();
             setupDrawer();
-            loadUserData();
+            initUserData();
+            initUserValue();
             Picasso.with(this)
                     .load(mDataManager.getPreferencesManager().LoadUserPhoto())
                     .placeholder(R.drawable.user_foto)
@@ -300,6 +305,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .error(R.drawable.user_foto)
                 .into(mMainProfileImage);
         mDataManager.getPreferencesManager().SaveUserPhoto(selectedImage);
+        Call<ResponseBody> call = mDataManager.uploadPhoto(selectedImage);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Log.d(TAG, "Удачно");
+
+            }
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                showSnackBar("Не удалось загрузить фотографию на сервер");
+            }
+        });
     }
 
     /**
@@ -349,7 +366,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     private void setupDrawer() throws IOException {
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
-        setupDrawerHeader(navigationView, Uri.parse("android.resource://softdesign.devintensive/drawable/avatar"), "AlexFrei", "email@email.de");
+        setupDrawerHeader(navigationView, mDataManager.getPreferencesManager().loadAvatar(),
+                mDataManager.getPreferencesManager().loadUserName(),
+                mDataManager.getPreferencesManager().loadUserData().get(1));
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
@@ -418,6 +437,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (actionBar != null) {
             actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
             actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(mDataManager.getPreferencesManager().loadUserName());
         }
     }
 
@@ -550,6 +570,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     editText.setFocusableInTouchMode(false);
                     saveUserData();
                 }*/
+                saveUserData();
 
                 ButterKnife.apply(mEditTexts, setEditTextParams, mode);
 
@@ -638,7 +659,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /**
      * Загружает пользовательские данные
      */
-    private void loadUserData(){
+    private void initUserData(){
         List<String> userData = mDataManager.getPreferencesManager().loadUserProfileData();
         for (int i = 0; i < userData.size(); i++){
             mEditTexts.get(i).setText(userData.get(i));
@@ -788,6 +809,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Intent appSettingsIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + getPackageName()));
         startActivityForResult(appSettingsIntent, ConstantManager.PERMISSION_REQUEST_SETTINGS_CODE);
     }
+
+    private void initUserValue() {
+        List<String> userData = mDataManager.getPreferencesManager().loadUserProfileValues();
+        for (int i = 0; i < userData.size(); i++) {
+            mTextViews.get(i).setText(userData.get(i));
+
+        }
+    }
+    private void loadUserData() {
+        List<String> userData = mDataManager.getPreferencesManager().loadUserProfileData();
+        changeTextOnTextView(mEditTexts, userData);
+    }
+
 }
 
 

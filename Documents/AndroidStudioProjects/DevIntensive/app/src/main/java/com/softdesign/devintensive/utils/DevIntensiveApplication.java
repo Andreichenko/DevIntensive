@@ -3,6 +3,9 @@ package com.softdesign.devintensive.utils;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.content.Context;
+
+import com.softdesign.devintensive.ui.activites.AuthActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +13,7 @@ import java.util.List;
 /**
  * Created by AlexFrei on 26.06.16.
  */
-public class DevIntensiveAplication extends Application {
+public class DevIntensiveApplication extends Application {
 
     private static SharedPreferences sSharedPreferences;
 
