@@ -13,26 +13,26 @@ import retrofit2.Call;
 import com.softdesign.devintensive.data.network.RestService;
 import com.softdesign.devintensive.data.network.ServiceGenerator;
 import com.softdesign.devintensive.data.network.req.UserLoginReq;
+import com.softdesign.devintensive.data.network.res.LoginModelRes;
+import com.softdesign.devintensive.data.network.res.UserListRes;
 import com.softdesign.devintensive.data.network.res.UserModelRes;
+import com.softdesign.devintensive.utils.ConstantManager;
 import com.softdesign.devintensive.utils.DevIntensiveApplication;
 
 /**
  * Created by AlexFrei on 26.06.16.
  */
 public class DataManager {
+    private static DataManager INSTANCE = null;
 
-    public static DataManager INSTANCE = null;
-
+    private Context mContext;
     private PreferencesManager mPreferencesManager;
-
     private RestService mRestService;
 
-
     public DataManager() {
-
         this.mPreferencesManager = new PreferencesManager();
-        mRestService = ServiceGenerator.createService(RestService.class);
-
+        this.mContext= DevIntensiveApplication.getContext();
+        this.mRestService= ServiceGenerator.createService(RestService.class);
     }
 
     public static DataManager getInstance() {
@@ -42,22 +42,27 @@ public class DataManager {
         return INSTANCE;
     }
 
-    public PreferencesManager getPreferencesManager() {
-
+    public PreferencesManager getPreferenceManager() {
         return mPreferencesManager;
     }
 
+    public Context getContext(){
+        return mContext;
+    }
 
-    public Call<UserModelRes> loginUser(UserLoginReq userLoginReq) {
+    // region ========== Network ===========
+    public Call<UserModelRes> loginUser(UserLoginReq userLoginReq){
         return mRestService.loginUser(userLoginReq);
     }
 
-    public Call<ResponseBody> uploadPhoto(Uri photoUri) {
-        File photo = new File(photoUri.getPath());
-        RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), photo);
-        MultipartBody.Part bodyPart = MultipartBody.Part
-                .createFormData("photo", String.valueOf(photoUri.hashCode()).substring(0, 7),
-                        requestBody);
-        return mRestService.uploadImage(bodyPart);
-    }
+            public Call<UserListRes> getUserList(){
+                return mRestService.getUserList();
+            }
+
+    // endregion
+
+    // region ========== Database ===========
+
+
+    // endregion
 }

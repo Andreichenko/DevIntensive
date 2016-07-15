@@ -14,20 +14,25 @@ import java.util.List;
  * Created by AlexFrei on 26.06.16.
  */
 public class DevIntensiveApplication extends Application {
+    private static final String TAG = ConstantManager.PREFIX_TAG + "DevIntensiveApp";
+
 
     private static SharedPreferences sSharedPreferences;
+    private static Context sContext;
 
-
-    public static SharedPreferences getSharedPreferences() {
-        return sSharedPreferences;
-
-
-    } @Override
+    @Override
     public void onCreate() {
         super.onCreate();
 
         sSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        sContext = this;
     }
+
+    public static SharedPreferences getSharedPreferences() {
+        return sSharedPreferences;
+    }
+    public static Context getContext() {return  sContext; }
+
 }
 
 

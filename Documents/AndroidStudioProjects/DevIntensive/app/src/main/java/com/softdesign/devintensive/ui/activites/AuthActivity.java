@@ -2,178 +2,188 @@ package com.softdesign.devintensive.ui.activites;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.net.Uri;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import com.softdesign.devintensive.BuildConfig;
 import com.softdesign.devintensive.data.managers.DataManager;
 import com.softdesign.devintensive.data.network.req.UserLoginReq;
+import com.softdesign.devintensive.data.network.res.LoginModelRes;
 import com.softdesign.devintensive.data.network.res.UserModelRes;
-import com.softdesign.devintensive.utils.AppConfig;
-import com.softdesign.devintensive.utils.NetworkStatus;
+import com.softdesign.devintensive.utils.ConstantManager;
+import com.softdesign.devintensive.utils.NetworkStatusChecker;
 
 import com.softdesign.devintensive.R;
 
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.BindViews;
 import butterknife.ButterKnife;
 
 /**
  * Created by AlexFrei on 06.07.16.
  */
-public class AuthActivity extends AppCompatActivity implements View.OnClickListener{
+public class AuthActivity extends BaseActivity implements View.OnClickListener {
+    private static final String TAG = ConstantManager.TAG_Prefix + "login Activity";
 
-    @BindViews({R.id.auth_login, R.id.auth_password})
-    List<EditText> mAuthFields;
-
-    @BindView(R.id.auth_button)
-    Button mAuthButton;
-
-    @BindView(R.id.forgot_pass)
-    TextView mForgotPass;
-
-    @BindView(R.id.auth_coordinatorlayout)
-    CoordinatorLayout mCoordinatorLayout;
-
+    private Button mSignIn;
+    private TextView mRememberPassword;
+    private EditText mLogin, mPassword;
+    private CoordinatorLayout mCoordinatorLayout;
     private DataManager mDataManager;
 
 
-
+    /**
+     * инициализация страницы логина и основных параметров
+     *
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "onCreate");
+        }
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_auth);
-        ButterKnife.bind(this);
 
         mDataManager = DataManager.getInstance();
-        mAuthButton.setOnClickListener(this);
-        mForgotPass.setOnClickListener(this);
+
+        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_coordinator_container);
+        mSignIn = (Button) findViewById(R.id.login_btn);
+        mRememberPassword = (TextView) findViewById(R.id.remember_txt);
+
+        mLogin = (EditText) findViewById(R.id.login_email_et);
+        mPassword = (EditText) findViewById(R.id.login_password_et);
+
+        mRememberPassword.setOnClickListener(this);
+        mSignIn.setOnClickListener(this);
     }
 
 
+    /**
+     * ожидание нажатия кнопок
+     *
+     * @param v
+     */
+    @Override
     public void onClick(View v) {
-
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "onClick");
+        }
         switch (v.getId()) {
-            case R.id.auth_button:
+            case R.id.login_btn:
                 signIn();
-
                 break;
 
-            case R.id.forgot_pass:
+            case R.id.remember_txt:
                 rememberPassword();
-
-
+                break;
         }
     }
-    private void showSnackbar(String message) {
-        Snackbar.make(mCoordinatorLayout, message, Snackbar.LENGTH_SHORT).show();
+
+    private void showSnackBar(String message) {
+        Snackbar.make(mCoordinatorLayout, message, Snackbar.LENGTH_LONG).show();
     }
 
     private void rememberPassword() {
-        Intent rememberIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(AppConfig.FORGOT_PASS_URL));
+        Intent rememberIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://devintensive.softdesign-apps.ru/forgotpass"));
         startActivity(rememberIntent);
-
     }
 
     private void loginSuccess(UserModelRes userModel) {
-        mDataManager.getPreferencesManager().saveAuthToken(userModel.getData().getToken());
-        mDataManager.getPreferencesManager().saveUserId(userModel.getData().getUser().getId());
+        mDataManager.getPreferenceManager().saveAuthToken(userModel.getData().getToken());
+        mDataManager.getPreferenceManager().saveUserId(userModel.getData().getUser().getId());
         saveUserValues(userModel);
-        saveUserProfile(userModel);
-        Intent loginIntent = new Intent(this, MainActivity.class);
+        saveUserFields(userModel);
+        saveUserNameProfile(userModel);
+        saveUserPhotoImg(userModel);
+        saveUserAvatar(userModel);
+
+
+        Intent loginIntent = new Intent(this, UserListActivity.class);//MainActivity.class);
         startActivity(loginIntent);
-        this.finish();
     }
 
     private void signIn() {
-        if (NetworkStatus.isNetworkAvailable(this)) {
-            String login, password;
-            login = mAuthFields.get(0).getText().toString();
-            password = mAuthFields.get(1).getText().toString();
-
-            if (login.equals("")) {
-                showSnackbar(getString(R.string.auth_login_login_empty));
-                return;
-            }
-
-            if (password.equals("")) {
-                showSnackbar(getString(R.string.auth_password_password_empty));
-                return;
-            }
-
-            Call<UserModelRes> call = mDataManager.loginUser(new UserLoginReq(login, password));
+        if (NetworkStatusChecker.isNetworkAvaliable(this)) {
+            Call<UserModelRes> call = mDataManager.loginUser(new UserLoginReq(mLogin.getText().toString(), mPassword.getText().toString()));
             call.enqueue(new Callback<UserModelRes>() {
                 @Override
                 public void onResponse(Call<UserModelRes> call, Response<UserModelRes> response) {
-                    switch (response.code()) {
-                        case 200:
-                            loginSuccess(response.body());
-                            break;
-                        case 404:
-                            showSnackbar(getString(R.string.auth_error_incor_login_or_pass));
-                            break;
-                        default:
-                            showSnackbar(getString(R.string.auth_error_error_message));
-                            break;
+                    if (response.code() == 200) {
+                        loginSuccess(response.body());
+                    } else if (response.code() == 404) {
+                        showSnackBar("неверный логин или пароль");
+                    } else {
+                        showSnackBar("Всё совсем плохо!");
                     }
                 }
 
                 @Override
                 public void onFailure(Call<UserModelRes> call, Throwable t) {
-                    showSnackbar(getString(R.string.auth_error_error_message));
-
+                    // TODO: 10.07.2016 обработать ошибки ретрофита
                 }
             });
+        } else {
 
-
-
-        }else{
-            showSnackbar(getString(R.string.auth_error_available_net));
+            showSnackBar("Сеть недоступна, попробуйте позже");
         }
     }
 
     private void saveUserValues(UserModelRes userModel) {
-        List<String> userValues = new ArrayList<>();
-        userValues.add(String.valueOf(userModel.getData().getUser().getProfileValues().getRating()));
-        userValues.add(String.valueOf(userModel.getData().getUser().getProfileValues().getLinesCode()));
-        userValues.add(String.valueOf(userModel.getData().getUser().getProfileValues().getProjects()));
-
-        mDataManager.getPreferencesManager().saveUserProfileValues(userValues);
+        int[] userValues = {
+                userModel.getData().getUser().getProfileValues().getRaiting(),
+                userModel.getData().getUser().getProfileValues().getLinesCode(),
+                userModel.getData().getUser().getProfileValues().getProjects()
+        };
+        mDataManager.getPreferenceManager().saveUserProfileValues(userValues);
     }
 
-    private void saveUserProfile(UserModelRes userModel) {
-        List<String> userValues = new ArrayList<>();
-        userValues.add(String.valueOf(userModel.getData().getUser().getContacts().getPhone())
-                .replaceAll("\\(", "").replaceAll("\\)", ""));
-        userValues.add(String.valueOf(userModel.getData().getUser().getContacts().getEmail()));
-        userValues.add(String.valueOf(userModel.getData().getUser().getContacts().getVk())
-                .split("/")[1]);
-        userValues.add(String.valueOf(userModel.getData().getUser().getRepositories().getRepo())
-                .replaceFirst("/", "mark").split("mark")[1]);
-        userValues.add(String.valueOf(userModel.getData().getUser().getPublicInfo().getBio()));
-        mDataManager.getPreferencesManager().saveUserData(userValues);
-        mDataManager.getPreferencesManager().saveUserName(
+    /**
+     * установка пользовательских полей из локальной версии дата менеджера после инициализации.
+     */
+    private void saveUserFields(UserModelRes userModel) {
+        String[] userFields = {
+                userModel.getData().getUser().getContacts().getPhone(),
+                userModel.getData().getUser().getContacts().getEmail(),
+                userModel.getData().getUser().getContacts().getVk(),
+                userModel.getData().getUser().getRepositories().getRepo().get(0).getGit(),
+                userModel.getData().getUser().getPublicInfo().getBio(),
+        };
+        mDataManager.getPreferenceManager().saveUserProfileData(userFields);
+    }
+
+    /**
+     * установка пользовательских полей из локальной версии дата менеджера после инициализации.
+     */
+    private void saveUserNameProfile(UserModelRes userModel) {
+        String[] userFields = {
+                userModel.getData().getUser().getFirstName(),
                 userModel.getData().getUser().getSecondName(),
-                userModel.getData().getUser().getFirstName());
-        mDataManager.getPreferencesManager().saveUserPhoto(Uri.parse(userModel.getData().getUser().getPublicInfo().getAvatar()));
-        mDataManager.getPreferencesManager().saveAvatar(Uri.parse(userModel.getData().getUser().getPublicInfo().getPhoto()));
+                userModel.getData().getUser().getContacts().getEmail()
+        };
+        mDataManager.getPreferenceManager().saveUserName(userFields);
     }
 
+    private void saveUserAvatar(UserModelRes userModel) {
+        String str = userModel.getData().getUser().getPublicInfo().getAvatar();
+        mDataManager.getPreferenceManager().saveUserAvatar(str);
+    }
 
+    private void saveUserPhotoImg(UserModelRes userModel) {
+        String str = userModel.getData().getUser().getPublicInfo().getPhoto();
+        mDataManager.getPreferenceManager().saveUserPhotoImg(str);
+    }
 }

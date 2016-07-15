@@ -12,131 +12,132 @@ import java.util.List;
  * Created by AlexFrei on 12.07.16.
  */
 public class UserModelRes {
-
     @SerializedName("success")
     @Expose
-    public boolean success;
+    private boolean success;
 
     @SerializedName("data")
     @Expose
     private Data data;
-    private User user;
-
 
     public Data getData() {
         return data;
-
     }
 
-    public class Contacts {
-        @SerializedName("vk")
+    public class User {
+
+        @SerializedName("_id")
         @Expose
-        private String vk;
-
-
-        @SerializedName("phone")
+        private String id;
+        @SerializedName("first_name")
         @Expose
-        private String phone;
-
-        @SerializedName("email")
+        private String firstName;
+        @SerializedName("second_name")
         @Expose
-        private String email;
-
-
+        private String secondName;
+        @SerializedName("__v")
+        @Expose
+        private int v;
+        @SerializedName("repositories")
+        @Expose
+        private Repositories repositories;
+        @SerializedName("contacts")
+        @Expose
+        private Contacts contacts;
+        @SerializedName("profileValues")
+        @Expose
+        private ProfileValues profileValues;
+        @SerializedName("publicInfo")
+        @Expose
+        private PublicInfo publicInfo;
+        @SerializedName("specialization")
+        @Expose
+        private String specialization;
+        @SerializedName("role")
+        @Expose
+        private String role;
         @SerializedName("updated")
         @Expose
         private String updated;
 
-
-        public String getVk() {
-            return vk;
+        public String getFirstName() {
+            return firstName;
         }
 
-
-        public String getPhone() {
-            return phone;
+        public String getSecondName() {
+            return secondName;
         }
 
-        public String getEmail() {
-            return email;
+        public String getId() {
+            return id;
+        }
+
+        public ProfileValues getProfileValues() {
+            return profileValues;
+        }
+
+        public Contacts getContacts() {
+            return contacts;
+        }
+
+        public Repositories getRepositories() {
+            return repositories;
+        }
+
+        public PublicInfo getPublicInfo() {
+            return publicInfo;
         }
     }
 
-    public class Data {
-        @SerializedName("user")
+    public class Repositories {
+
+        @SerializedName("repo")
         @Expose
-        private User user;
-    }
-
-    @SerializedName("token")
-    @Expose
-    private String token;
-
-    public User getUser() {
-        return user;
-
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-
-    public class ProfileValues {
-        @SerializedName("homeTask")
-        @Expose
-        public int homeTask;
-
-
-        @SerializedName("projects")
-        @Expose
-        private int projects;
-
-
-        @SerializedName("linesCode")
-        @Expose
-        private int linesCode;
-
-
-        @SerializedName("rait")
-        @Expose
-        private int rait;
-
-
+        private List<Repo> repo = new ArrayList<Repo>();
         @SerializedName("updated")
         @Expose
-        public String updated;
+        private String updated;
 
-        public int getProjects() {
-            return projects;
+        public List<Repo> getRepo() {
+            return repo;
+        }
+    }
+
+    public class Repo {
+
+        @SerializedName("_id")
+        @Expose
+        private String id;
+        @SerializedName("git")
+        @Expose
+        private String git;
+        @SerializedName("title")
+        @Expose
+        private String title;
+
+        public String getGit() {
+            return git;
         }
 
-        public int getLinesCode() {
-            return linesCode;
-        }
-
-        public int getRating() {
-            return rait;
+        public String getId() {
+            return id;
         }
     }
 
     public class PublicInfo {
+
         @SerializedName("bio")
         @Expose
         private String bio;
-
         @SerializedName("avatar")
         @Expose
         private String avatar;
-
         @SerializedName("photo")
         @Expose
         private String photo;
-
         @SerializedName("updated")
         @Expose
-        public String updated;
-
+        private String updated;
 
         public String getBio() {
             return bio;
@@ -151,123 +152,80 @@ public class UserModelRes {
         }
     }
 
-    public class Repo {
-        @SerializedName("_id")
+    public class ProfileValues {
+
+        @SerializedName("homeTask")
         @Expose
-        public String id;
-
-        @SerializedName("git")
+        private int homeTask;
+        @SerializedName("projects")
         @Expose
-        public String git;
-
-        @SerializedName("title")
+        private int projects;
+        @SerializedName("linesCode")
         @Expose
-        public String title;
-
-    }
-
-    public class Repositories {
-        @SerializedName("repo")
+        private int linesCode;
+        @SerializedName("rait")
         @Expose
-        private List<Repo> repo = new ArrayList<Repo>();
-        @SerializedName("updated")
-        @Expose
-        public String updated;
-
-
-        public String getRepo() {
-            return repo.get(0).git;
-        }
-    }
-
-    public class User {
-        @SerializedName("_id")
-        @Expose
-        private String id;
-
-        @SerializedName("first_name")
-        @Expose
-        private String firstName;
-
-        @SerializedName("second_name")
-        @Expose
-        private String secondName;
-
-        @SerializedName("__v")
-        @Expose
-        private int v;
-
-        @SerializedName("repositories")
-        @Expose
-        private Repositories repositories;
-
-        @SerializedName("contacts")
-        @Expose
-        private Contacts contacts;
-
-        @SerializedName("profileValues")
-        @Expose
-        private ProfileValues profileValues;
-
-        @SerializedName("publicInfo")
-        @Expose
-        private PublicInfo publicInfo;
-
-        @SerializedName("specialization")
-        @Expose
-        private String specialization;
-
-        @SerializedName("role")
-        @Expose
-        private String role;
-
+        private int rait;
         @SerializedName("updated")
         @Expose
         private String updated;
 
-        public String getId() {
-            return id;
+        public int getProjects() {
+            return projects;
         }
 
-        public String getFirstName() {
-            return firstName;
+        public int getLinesCode() {
+            return linesCode;
         }
 
-        public String getSecondName() {
-            return secondName;
+        public int getRaiting() {
+            return rait;
+        }
+    }
+
+    public class Data {
+
+        @SerializedName("user")
+        @Expose
+        private User user;
+        @SerializedName("token")
+        @Expose
+        private String token;
+
+        public User getUser() {
+            return user;
         }
 
-        public int getV() {
-            return v;
+        public String getToken() {
+            return token;
+        }
+    }
+
+    public class Contacts {
+
+        @SerializedName("vk")
+        @Expose
+        private String vk;
+        @SerializedName("phone")
+        @Expose
+        private String phone;
+        @SerializedName("email")
+        @Expose
+        private String email;
+        @SerializedName("updated")
+        @Expose
+        private String updated;
+
+        public String getVk() {
+            return vk;
         }
 
-        public Repositories getRepositories() {
-            return repositories;
+        public String getPhone() {
+            return phone;
         }
 
-        public Contacts getContacts() {
-            return contacts;
-        }
-
-        public ProfileValues getProfileValues() {
-            return profileValues;
-        }
-
-        public PublicInfo getPublicInfo() {
-            return publicInfo;
-        }
-
-        public String getSpecialization() {
-            return specialization;
-        }
-
-        public String getRole() {
-            return role;
-        }
-
-        public String getUpdated() {
-            return updated;
+        public String getEmail() {
+            return email;
         }
     }
 }
-
