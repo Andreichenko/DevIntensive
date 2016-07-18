@@ -1,6 +1,6 @@
 package com.softdesign.devintensive.data.network;
 
-import com.softdesign.devintensive.data.network.interceptor.HeaderInterceptor;
+import com.softdesign.devintensive.data.network.interceptors.HeaderInterceptor;
 import com.softdesign.devintensive.utils.AppConfig;
 
 import okhttp3.OkHttpClient;
@@ -13,12 +13,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class ServiceGenerator {
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-    private static Retrofit.Builder sBuilder =
-            new Retrofit.Builder()
-                    .baseUrl(AppConfig.BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create());
 
-    public static <s> s createService(Class<s> serviceClass) {
+    private static Retrofit.Builder sBuilder = new Retrofit.Builder()
+            .baseUrl(AppConfig.BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create());
+
+    public static <S> S createService(Class<S> serviceClass) {
 
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -26,11 +26,11 @@ public class ServiceGenerator {
         httpClient.addInterceptor(new HeaderInterceptor());
         httpClient.addInterceptor(logging);
 
-
         Retrofit retrofit = sBuilder
                 .client(httpClient.build())
                 .build();
-                return retrofit.create(serviceClass);
-            }
+        return retrofit.create(serviceClass);
+    }
+
 
 }

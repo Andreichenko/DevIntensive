@@ -12,16 +12,38 @@ import java.util.List;
  * Created by AlexFrei on 12.07.16.
  */
 public class UserModelRes {
+
     @SerializedName("success")
     @Expose
     private boolean success;
-
     @SerializedName("data")
     @Expose
     private Data data;
 
     public Data getData() {
         return data;
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public class Data {
+
+        @SerializedName("user")
+        @Expose
+        private User user;
+        @SerializedName("token")
+        @Expose
+        private String token;
+
+        public User getUser() {
+            return user;
+        }
+
+        public String getToken() {
+            return token;
+        }
     }
 
     public class User {
@@ -60,14 +82,6 @@ public class UserModelRes {
         @Expose
         private String updated;
 
-        public String getFirstName() {
-            return firstName;
-        }
-
-        public String getSecondName() {
-            return secondName;
-        }
-
         public String getId() {
             return id;
         }
@@ -76,16 +90,40 @@ public class UserModelRes {
             return profileValues;
         }
 
-        public Contacts getContacts() {
-            return contacts;
+        public String getFirstName() {
+            return firstName;
+        }
+
+        public String getSecondName() {
+            return secondName;
+        }
+
+        public int getV() {
+            return v;
         }
 
         public Repositories getRepositories() {
             return repositories;
         }
 
+        public Contacts getContacts() {
+            return contacts;
+        }
+
         public PublicInfo getPublicInfo() {
             return publicInfo;
+        }
+
+        public String getSpecialization() {
+            return specialization;
+        }
+
+        public String getRole() {
+            return role;
+        }
+
+        public String getUpdated() {
+            return updated;
         }
     }
 
@@ -101,6 +139,10 @@ public class UserModelRes {
         public List<Repo> getRepo() {
             return repo;
         }
+
+        public String getUpdated() {
+            return updated;
+        }
     }
 
     public class Repo {
@@ -115,12 +157,16 @@ public class UserModelRes {
         @Expose
         private String title;
 
+        public String getId() {
+            return id;
+        }
+
         public String getGit() {
             return git;
         }
 
-        public String getId() {
-            return id;
+        public String getTitle() {
+            return title;
         }
     }
 
@@ -149,6 +195,10 @@ public class UserModelRes {
 
         public String getPhoto() {
             return photo;
+        }
+
+        public String getUpdated() {
+            return updated;
         }
     }
 
@@ -181,23 +231,17 @@ public class UserModelRes {
         public int getRaiting() {
             return rait;
         }
-    }
 
-    public class Data {
-
-        @SerializedName("user")
-        @Expose
-        private User user;
-        @SerializedName("token")
-        @Expose
-        private String token;
-
-        public User getUser() {
-            return user;
+        public int getHomeTask() {
+            return homeTask;
         }
 
-        public String getToken() {
-            return token;
+        public int getRait() {
+            return rait;
+        }
+
+        public String getUpdated() {
+            return updated;
         }
     }
 
@@ -226,6 +270,10 @@ public class UserModelRes {
 
         public String getEmail() {
             return email;
+        }
+
+        public String getUpdated() {
+            return updated;
         }
     }
 }

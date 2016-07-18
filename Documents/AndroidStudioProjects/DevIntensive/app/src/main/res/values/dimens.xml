@@ -3,106 +3,38 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
-    <!-- Font sizes -->
-    <dimen name="font_larger_orient_24">24sp</dimen>
-    <dimen name="font_larger_22">22sp</dimen>
-    <dimen name="font_large_18">18sp</dimen>
-    <dimen name="font_normal_16">16sp</dimen>
-    <dimen name="font_small_12">12sp</dimen>
-    <dimen name="font_size_22">22sp</dimen>
-
-    <!-- Typical spacing between two views -->
-    <dimen name="spacing_small_16">16dp</dimen>
-    <dimen name="spacing_smaller_8">8dp</dimen>
-    <dimen name="size_large_72">72dp</dimen>
-    <dimen name="spacing_larger_72">72dp</dimen>
-    <dimen name="spacing_large_56">56dp</dimen>
-    <dimen name="spacing_huge_32">32dp</dimen>
-    <dimen name="spacing_normal_24">24dp</dimen>
-    <dimen name="spacing_normal_16">16dp</dimen>
-    <dimen name="spacing_small_8">8dp</dimen>
-    <dimen name="spacing_tiny_4">4dp</dimen>
-    <dimen name="space_half_normal_size_28">28dp</dimen>
+    <!-- Sizes -->
+    <dimen name="size_small_24">24dp</dimen>
     <dimen name="size_medium_56">56dp</dimen>
+    <dimen name="size_large_72">72dp</dimen>
+    <dimen name="size_large_80">80dp</dimen>
 
-    <!-- Typical sizes of views -->
-    <dimen name="button_height_tall_60">60dp</dimen>
-    <dimen name="button_height_normal_40">40dp</dimen>
-    <dimen name="button_height_short_32">32dp</dimen>
+    <!-- Spaces -->
+    <dimen name="spacing_small_8">8dp</dimen>
+    <dimen name="spacing_normal_16">16dp</dimen>
+    <dimen name="spacing_medial_24">24dp</dimen>
+    <dimen name="spacing_medium_28">28dp</dimen>
+    <dimen name="spacing_medium_32">32dp</dimen>
+    <dimen name="spacing_medium_48">48dp</dimen>
+    <dimen name="spacing_large_56">56dp</dimen>
+    <dimen name="spacing_larger_72">72dp</dimen>
 
-    <!-- Line Size -->
-    <dimen name="line_size_2">2dp</dimen>
+    <!-- Line sizes -->
     <dimen name="line_size">1dp</dimen>
-    <dimen name="height_line">72dp</dimen>
-    <dimen name="line_small">1dp</dimen>
-    <dimen name="Layout_mar_left_16">16dp</dimen>
-    <dimen name="Layout_mar_left_24">24dp</dimen>
-    <dimen name="Layout_mar_left_32">32dp</dimen>
-    <dimen name="Layout_mar_left_72">72dp</dimen>
-    <dimen name="Layout_mar_top_24">24dp</dimen>
-    <dimen name="Layout_mar_top_16">16dp</dimen>
-    <dimen name="Layout_mar_right_32">32dp</dimen>
-    <dimen name="Layout_mar_right_20">20dp</dimen>
-    <dimen name="Layout_mar_right_16">16dp</dimen>
-    <dimen name="Layout_height_72">72dp</dimen>
-    <dimen name="Layout_height_104">104dp</dimen>
-    <dimen name="Layout_height_56">56dp</dimen>
-    <dimen name="Layout_height_16">16dp</dimen>
-    <dimen name="Line_size_1">1dp</dimen>
-    <dimen name="placeholder_photo_size_48">48dp</dimen>
-    <dimen name="nav_bar_head_172">172dp</dimen>
-    <dimen name="user_prof_nav_104">104dp</dimen>
-    <dimen name="login_corner_2">2dp</dimen>
-    <dimen name="red_view_line_4">4dp</dimen>
 
-    <!-- Vertical Line -->
-    <dimen name="vertical_divline_hight">72dp</dimen>
-    <dimen name="vertical_divline_width">1dp</dimen>
+    <!-- Text sizes -->
+    <dimen name="text_size_small_12">12sp</dimen>
+    <dimen name="text_size_normal_14">14sp</dimen>
+    <dimen name="text_size_medial_16">16sp</dimen>
+    <dimen name="text_size_medium_20">20sp</dimen>
+    <dimen name="text_size_large_34">34sp</dimen>
 
-    <!-- Advanced Font -->
-    <dimen name="left_small_margin_16">16dp</dimen>
-    <dimen name="left_medial_margin_24">24dp</dimen>
-    <dimen name="left_medium_margin_32">32dp</dimen>
-    <dimen name="left_large_margin_72">72dp</dimen>
-    <dimen name="right_small_margin_16">16dp</dimen>
-    <dimen name="right_medial_margin_24">24dp</dimen>
-    <dimen name="right_medium_margin_32">32dp</dimen>
-    <dimen name="right_large_margin_72">72dp</dimen>
+    <dimen name="drawer_header_height">172dp</dimen>
     <dimen name="profile_image_size">256dp</dimen>
-    <dimen name="fab_right_space">16dp</dimen>
+    <dimen name="fab_right_space">8dp</dimen>
     <dimen name="placeholder_photo_size_90">90dp</dimen>
-
-    <dimen name="image_size_90">90dp</dimen>
-    <dimen name="margin_56">56dp</dimen>
-    <dimen name="auth_layout_width">256dp</dimen>
-
-    <dimen name="Baseline_grid_8">8dp</dimen>
-    <dimen name="Iconography_toolbars_align_4">4dp</dimen>
-    <dimen name="Icon_24">24dp</dimen>
-    <dimen name="Baseline_grid_0">0dp</dimen>
-    <dimen name="Layout_mar_left_8">8dp</dimen>
-    <dimen name="menu_60">60dp</dimen>
-    <dimen name="profile_image_size_256">256dp</dimen>
-    <dimen name="user_prof_nav_112">112dp</dimen>
-    <dimen name="user_prof_nav_56">56dp</dimen>
-    <dimen name="auth_card_240">240dp</dimen>
-    <dimen name="minwidth_126">126dp</dimen>
-
-
-    <dimen name="Text_View_Width_150">150dp</dimen>
-    <dimen name="Ball_Radius_30">30dp</dimen>
-    <dimen name="Font_Size_16">16sp</dimen>
-    <dimen name="Font_Size_112">112sp</dimen>
-    <dimen name="Font_Size_56">56sp</dimen>
-    <dimen name="Font_Size_45">45sp</dimen>
-    <dimen name="Font_Size_34">34sp</dimen>
-    <dimen name="Font_Size_24">24sp</dimen>
-    <dimen name="Font_Size_20">20sp</dimen>
-    <dimen name="Font_Size_14">14sp</dimen>
-    <dimen name="Font_Size_13">13sp</dimen>
-    <dimen name="Font_Size_15">15sp</dimen>
-    <dimen name="Font_Size_12">12sp</dimen>
-    <dimen name="Font_Size_28">28sp</dimen>
-
-
+    <dimen name="drawer_header_avatar_size">60dp</dimen>
+    <dimen name="auth_red_stick_width">4dp</dimen>
+    <dimen name="card_corner_radius">2dp</dimen>
+    <dimen name="card_elevation">8dp</dimen>
 </resources>

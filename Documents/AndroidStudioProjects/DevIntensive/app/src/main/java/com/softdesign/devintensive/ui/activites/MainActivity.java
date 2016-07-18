@@ -1,18 +1,13 @@
 package com.softdesign.devintensive.ui.activites;
 
-
 import android.Manifest;
 import android.app.Dialog;
-import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -41,23 +36,27 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-
-import com.softdesign.devintensive.BuildConfig;
 import com.softdesign.devintensive.R;
-import com.softdesign.devintensive.data.managers.DataManager;
-import com.softdesign.devintensive.data.network.req.UploadFile;
-import com.softdesign.devintensive.utils.CheckInputInformation;
-import com.softdesign.devintensive.utils.CircleTransform;
-import com.softdesign.devintensive.utils.ConstantManager;
-import com.softdesign.devintensive.utils.ImageRounded;
-import com.squareup.picasso.Picasso;
-import com.vicmikhailau.maskededittext.MaskedEditText;
 
+import com.softdesign.devintensive.data.managers.DataManager;
+import com.softdesign.devintensive.ext.MaskTextWatcher;
+import com.softdesign.devintensive.utils.ConstantManager;
+import com.softdesign.devintensive.utils.MediaStoreFileHelper;
+import com.softdesign.devintensive.utils.NetworkStatusChecker;
+import com.softdesign.devintensive.utils.RoundedImageTransformation;
+import com.squareup.picasso.Picasso;
+import com.vk.sdk.VKAccessToken;
+import com.vk.sdk.VKCallback;
+import com.vk.sdk.VKSdk;
+import com.vk.sdk.api.VKApi;
+import com.vk.sdk.api.VKApiConst;
+import com.vk.sdk.api.VKError;
+import com.vk.sdk.api.VKParameters;
+import com.vk.sdk.api.VKRequest;
+import com.vk.sdk.api.VKResponse;
+import com.vk.sdk.api.model.VKApiUserFull;
+import com.vk.sdk.api.model.VKList;
 
 import java.io.File;
 import java.io.IOException;
@@ -69,712 +68,594 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-public class MainActivity   extends BaseActivity implements View.OnClickListener {
+public class MainActivity extends BaseActivity {
 
-    private static final String TAG = ConstantManager.TAG_Prefix + "Main Activity";
+    private static final String TAG = ConstantManager.TAG_PREFIX + "MainActivity";
 
     private DataManager mDataManager;
-
-    private CoordinatorLayout mCoordinatorLayout;
-    private Toolbar mToolbar;
-    private DrawerLayout mNavigationDrawer;
-    private RelativeLayout mProfilePlaceholder;
-    private CollapsingToolbarLayout mCollapsingToolbar;
-    private AppBarLayout.LayoutParams mAppBarParams = null;
-    private AppBarLayout mAppBarLayout;
-
-        private TextView mUserValueRaiting, mUserValueCodeLines, mUserValueProjects, mAppName, mAppEmail;
-        private List<TextView> mUserValueViews;
-        private List<TextView> mUserInfoApp;
-
-    private ImageView mCall;
-    private ImageView mEmail;
-    private ImageView mVK;
-    private ImageView mGitHub;
-        private ImageView mUserAvatarImg;
-
-    private FloatingActionButton mFab;
-    private EditText mUserPhone, mUserMail, mUserVK, mUserGit, mUserBio;
-    private List<EditText> mUserInfoViews;
-    private Boolean mFlag = false;
-    private File mPhotoFile = null;
-    private Uri mSelectedImage = null;
-    private ImageView mProfileImage;
     private int mCurrentEditMode;
+    private AppBarLayout.LayoutParams mAppBarParams;
+    private File mPhotoFile;
+    private Uri mSelectedImage;
+    private Uri mCurrentProfileImage;
+
+    private ImageView drawerUsrAvatar;
+    private TextView drawerUserFuulName;
+    private TextView drawerUserEmail;
+
+    @BindView(R.id.main_coordinator_container) CoordinatorLayout mCoordinatorLayout;
+    @BindView(R.id.toolbar) Toolbar mToolbar;
+    @BindView(R.id.navigation_drawer) DrawerLayout mNavigationDrawer;
+    @BindView(R.id.navigation_view) NavigationView mNavigationView;
+    @BindView(R.id.fab) FloatingActionButton mFab;
+    @BindView(R.id.profile_placeholder) RelativeLayout mProfilePlaceholder;
+    @BindView(R.id.collapsing_toolbar) CollapsingToolbarLayout mCollapsingToolbar;
+    @BindView(R.id.appbar_layout) AppBarLayout mAppBarLayout;
+    @BindView(R.id.user_photo_img) ImageView mProfileImage;
+
+    @BindView(R.id.phone_edit) EditText mUserPhone;
+    @BindView(R.id.email_edit) EditText mUserMail;
+    @BindView(R.id.vk_profile_edit) EditText mUserVk;
+    @BindView(R.id.repo_edit) EditText mUserGit;
+    @BindView(R.id.about_edit) EditText mUserBio;
+
+    @BindViews({R.id.phone_edit, R.id.email_edit, R.id.vk_profile_edit, R.id.repo_edit, R.id.about_edit})
+    List<EditText> mUserFields;
+
+    @BindViews({R.id.user_info_rait_txt, R.id.user_info_code_lines_txt, R.id.user_info_projects_txt})
+    List<TextView> mUserValueViews;
+
+    @BindView(R.id.phone_edit_layout) TextInputLayout mUserPhoneLayout;
+    @BindView(R.id.email_edit_layout) TextInputLayout mUserMailLayout;
+    @BindView(R.id.vk_profile_edit_layout) TextInputLayout mUserVkLayout;
+    @BindView(R.id.repo_edit_layout) TextInputLayout mUserGitLayout;
 
 
-    /**
-     * Инициализация параметров при старте окна
-     *
-     * @param savedInstanceState
-     */
+    static final ButterKnife.Setter<View, Boolean> EDIT_TEXT_ENABLED = new ButterKnife.Setter<View, Boolean>() {
+        @Override public void set(View view, Boolean value, int index) {
+            view.setEnabled(value);
+            view.setFocusable(value);
+            view.setFocusableInTouchMode(value);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (BuildConfig.DEBUG) {
-            Log.d(TAG, "onCreate");
-        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+        Log.d(TAG, "OnCreate");
+
         mDataManager = DataManager.getInstance();
-        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_coordinator_container);
 
-                mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mFab = (FloatingActionButton) findViewById(R.id.fab);
-        mProfilePlaceholder = (RelativeLayout) findViewById(R.id.profile_placeholder);
-        mCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        mAppBarLayout = (AppBarLayout) findViewById(R.id.appbar_layout);
-        mProfileImage = (ImageView) findViewById(R.id.user_photo_img);
-        mNavigationDrawer = (DrawerLayout) findViewById(R.id.navigation_drawer);
+        mUserPhone.addTextChangedListener(new MaskTextWatcher(mUserPhoneLayout, "+X XXX XXX-XX-XX xxxxxxxxx", MaskTextWatcher.PHONE_MASK));
+        mUserMail.addTextChangedListener(new MaskTextWatcher(mUserMailLayout, "XXX@XX.XX", MaskTextWatcher.EMAIL_MASK));
+        mUserVk.addTextChangedListener(new MaskTextWatcher(mUserVkLayout, "vk.com/XXX", MaskTextWatcher.URL_MASK));
+        mUserGit.addTextChangedListener(new MaskTextWatcher(mUserGitLayout, "github.com/XXX", MaskTextWatcher.URL_MASK));
 
-        mUserPhone = (EditText) findViewById(R.id.phone_et);
-        mUserMail = (EditText) findViewById(R.id.email_et);
-        mUserVK = (EditText) findViewById(R.id.vkcom_et);
-        mUserGit = (EditText) findViewById(R.id.github_et);
-        mUserBio = (EditText) findViewById(R.id.about_et);
 
-                mUserValueRaiting = (TextView) findViewById(R.id.user_info_rate_txt);
-                mUserValueCodeLines = (TextView) findViewById(R.id.user_info_code_lines_txt);
-                mUserValueProjects = (TextView) findViewById(R.id.user_info_projects_txt);
-
-                mUserInfoViews = new ArrayList<>();
-        mUserInfoViews.add(mUserPhone);
-        mUserInfoViews.add(mUserMail);
-        mUserInfoViews.add(mUserVK);
-        mUserInfoViews.add(mUserGit);
-        mUserInfoViews.add(mUserBio);
-
-                        mUserValueViews = new ArrayList<>();
-                mUserValueViews.add(mUserValueRaiting);
-                mUserValueViews.add(mUserValueCodeLines);
-                mUserValueViews.add(mUserValueProjects);
-
-                mFab.setOnClickListener(this);
-        mProfilePlaceholder.setOnClickListener(this);
-
-        setupToolbar();
+        setupToolBar();
         setupDrawer();
 
-                initUserFields();
-                initUserInfoValue();
-
-
-        mCall = (ImageView) findViewById(R.id.call_img);
-        mCall.setOnClickListener(this);
-        mEmail = (ImageView) findViewById(R.id.send_img);
-        mEmail.setOnClickListener(this);
-        mVK = (ImageView) findViewById(R.id.vk_view);
-        mVK.setOnClickListener(this);
-        mGitHub = (ImageView) findViewById(R.id.github_view);
-        mGitHub.setOnClickListener(this);
-
-        Picasso.with(this)
-
-                                .load(mDataManager.getPreferenceManager().loadUserPhotoImg())
-                                .placeholder(R.drawable.user_foto)
-                                .resize(768, 512)
-                                .centerCrop()
-                .into(mProfileImage);
+        initUserFields();
+        initUserInfoValue();
 
         if (savedInstanceState == null) {
 
         } else {
-            mCurrentEditMode = savedInstanceState.getInt(ConstantManager.EDIT_MODE_KEY, 0);
-            changeEditMode(mCurrentEditMode);
+
         }
-
-
-
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        if (BuildConfig.DEBUG) {
-            Log.d(TAG, "onStart");
-        }
-
+        Log.d(TAG, "onStart");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (BuildConfig.DEBUG) {
-            Log.d(TAG, "onResume");
-        }
+        Log.d(TAG, "onResume");
     }
 
     @Override
     protected void onPause() {
-        if (BuildConfig.DEBUG) {
-            Log.d(TAG, "onPause");
-        }
         super.onPause();
-
+        Log.d(TAG, "onPause");
 
     }
 
     @Override
     protected void onStop() {
-        if (BuildConfig.DEBUG) {
-            Log.d(TAG, "onStop");
-        }
         super.onStop();
+        Log.d(TAG, "onStop");
     }
 
     @Override
     protected void onDestroy() {
-        if (BuildConfig.DEBUG) {
-            Log.d(TAG, "onDestroy");
-        }
         super.onDestroy();
+        Log.d(TAG, "onDestroy");
     }
 
     @Override
     protected void onRestart() {
-        if (BuildConfig.DEBUG) {
-            Log.d(TAG, "onRestart");
-        }
         super.onRestart();
+        Log.d(TAG, "onRestart");
     }
 
-    /**
-     * обработчик нажатия кнопок, на входе ловится id нажатой кнопки
-     *
-     * @param v
-     */
-    @Override
-    public void onClick(View v) {
-        if (BuildConfig.DEBUG) {
-            Log.d(TAG, "onClick");
-        }
-        switch (v.getId()) {
-            case R.id.fab:
-                if (mCurrentEditMode == 0) {
-                    changeEditMode(1);
-                    mCurrentEditMode = 1;
-                } else {
-                    changeEditMode(0);
-                    mCurrentEditMode = 0;
-                }
-                break;
-            case R.id.profile_placeholder:
-                showDialog(ConstantManager.LOAD_PROFILE_PHOTO);
-                break;
-            case R.id.call_img:
-                call();
-                break;
-            case R.id.send_img:
-                sendEmail();
-                break;
-            case R.id.vk_view:
-                vkView();
-                break;
-            case R.id.github_view:
-                gitHubView();
-                break;
-        }
-    }
-
-    /**
-     * сохранение параметров при переходе между окнами
-     *
-     * @param outState
-     */
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        if (BuildConfig.DEBUG) {
-            Log.d(TAG, "onSaveInstanceState");
-        }
         super.onSaveInstanceState(outState);
+        Log.d(TAG, "onSaveInstanceState");
         outState.putInt(ConstantManager.EDIT_MODE_KEY, mCurrentEditMode);
-
     }
 
-    /**
-     * отрисовка серой плашки внизу экрана с отображением текста поверх
-     *
-     * @param message выводимое сообщение
-     */
-    public void showSnackbar(String message) {
-        if (BuildConfig.DEBUG) {
-            Log.d(TAG, "showSnackbar");
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        Log.d(TAG, "onRestoreInstanceState");
+        mCurrentEditMode = savedInstanceState.getInt(ConstantManager.EDIT_MODE_KEY, 0);
+        changeEditMode(mCurrentEditMode);
+    }
+
+    @OnClick(R.id.fab)
+    protected void fabOnClick() {
+        if (mCurrentEditMode == 0) {
+            changeEditMode(1);
+        } else {
+            if (isUserProfileError()) {
+                showSnackbar(getString(R.string.error_correct_profile));
+            } else {
+                changeEditMode(0);
+            }
+
         }
+    }
+
+    @OnClick(R.id.profile_placeholder)
+    protected void profilePlaceholderOnClick() {
+        showDialog(ConstantManager.LOAD_PROFILE_PHOTO);
+    }
+
+    @OnClick(R.id.make_call_img)
+    protected void makeCall() {
+        Uri phoneUri = Uri.parse("tel:" + mUserPhone.getText());
+        Intent callIntent = new Intent(Intent.ACTION_DIAL, phoneUri);
+        startActivity(callIntent);
+    }
+
+    @OnClick(R.id.send_email_img)
+    protected void sendEmail() {
+        Uri emailUri = Uri.parse("mailto:" + mUserMail.getText());
+        Intent callIntent = new Intent(Intent.ACTION_SENDTO, emailUri);
+        startActivity(callIntent);
+    }
+
+    @OnClick(R.id.view_vk_profile_img)
+    protected void viewVkProfile() {
+        Uri vkProfileUri = Uri.parse("https://" + mUserVk.getText());
+        Intent callIntent = new Intent(Intent.ACTION_VIEW, vkProfileUri);
+        startActivity(callIntent);
+    }
+
+    @OnClick(R.id.view_repo_img)
+    protected void viewRepo() {
+        Uri repoUri = Uri.parse("https://" + mUserGit.getText());
+        Intent callIntent = new Intent(Intent.ACTION_VIEW, repoUri);
+        startActivity(callIntent);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            mNavigationDrawer.openDrawer(GravityCompat.START);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mNavigationDrawer.isDrawerOpen(GravityCompat.START)) {
+            mNavigationDrawer.closeDrawer(GravityCompat.START);
+        } else if (mCurrentEditMode == 1) {
+            changeEditMode(0);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    private boolean isUserProfileError() {
+        if (mUserPhoneLayout.isErrorEnabled() || mUserMailLayout.isErrorEnabled()
+                || mUserVkLayout.isErrorEnabled() || mUserGitLayout.isErrorEnabled()) {
+            return true;
+        }
+        return false;
+    }
+
+    private void showSnackbar(String message) {
         Snackbar.make(mCoordinatorLayout, message, Snackbar.LENGTH_LONG).show();
     }
 
-    /**
-     * настройка кнопки для вызова меню слева
-     */
-    private void setupToolbar() {
-        if (BuildConfig.DEBUG) {
-            Log.d(TAG, "setupToolbar");
-        }
+    private void setupToolBar() {
         setSupportActionBar(mToolbar);
-        ActionBar actionbar = getSupportActionBar();
-
+        ActionBar actionBar = getSupportActionBar();
         mAppBarParams = (AppBarLayout.LayoutParams) mCollapsingToolbar.getLayoutParams();
-        if (actionbar != null) {
-            actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
-            actionbar.setDisplayHomeAsUpEnabled(true);
+
+        mCollapsingToolbar.setTitle(mDataManager.getPreferencesManager().getUserFullName());
+        insertProfileImage(mDataManager.getPreferencesManager().loadUserPhoto());
+
+        if (actionBar != null) {
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    private void setupDrawer() {
+
+        drawerUsrAvatar = (ImageView) mNavigationView.getHeaderView(0).findViewById(R.id.drawer_avatar_img);
+        drawerUserFuulName = (TextView) mNavigationView.getHeaderView(0).findViewById(R.id.drawer_user_name_txt);
+        drawerUserEmail = (TextView) mNavigationView.getHeaderView(0).findViewById(R.id.drawer_user_email_txt);
+
+        drawerUserFuulName.setText(mDataManager.getPreferencesManager().getUserFullName());
+        drawerUserEmail.setText(mDataManager.getPreferencesManager().getUserEmail());
+
+        insertDrawerAvatar(mDataManager.getPreferencesManager().loadUserAvatar());
+
+        mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem item) {
+                showSnackbar(item.getTitle().toString());
+                item.setChecked(true);
+                mNavigationDrawer.closeDrawer(GravityCompat.START);
+
+                if (item.getItemId() == R.id.login_menu) {
+                    Intent authIntent = new Intent(MainActivity.this, AuthActivity.class);
+                    finish();
+                    startActivity(authIntent);
+                }
+
+                if (item.getItemId() == R.id.login_vk_menu) {
+                    VKSdk.login(MainActivity.this, null);
+                }
+
+                return false;
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case ConstantManager.REQUEST_GALLERY_PICTURE:
+                if (resultCode == RESULT_OK && data != null) {
+                    mSelectedImage = data.getData();
+                    mDataManager.getPreferencesManager().saveUserPhoto(mSelectedImage);
+                    insertProfileImage(mSelectedImage);
+                }
+                break;
+
+            case ConstantManager.REQUEST_CAMERA_PICTURE:
+                if(resultCode == RESULT_OK && mPhotoFile != null) {
+                    mSelectedImage = Uri.fromFile(mPhotoFile);
+                    mDataManager.getPreferencesManager().saveUserPhoto(mSelectedImage);
+                    insertProfileImage(mSelectedImage);
+                }
+        }
+
+        if (!VKSdk.onActivityResult(requestCode, resultCode, data,
+                new VKCallback<VKAccessToken>() {
+                    @Override
+                    public void onResult(VKAccessToken res) {
+                        loadVkUserInfo();
+                    }
+
+                    @Override
+                    public void onError(VKError error) {
+                        // Произошла ошибка авторизации (например, пользователь запретил авторизацию)
+                        showSnackbar("Авторизация не удалась: " + error.toString());
+                    }
+                })) {
+            super.onActivityResult(requestCode, resultCode, data);
         }
     }
 
     /**
-     * настройка кнопкb FAB для редактирования и сохранения параметров клиентских
+     * переключает режим редактирования
      *
-     * @param mode какой из режимов. что нажато?!
+     * @param mode если 1 - режим редактирования, если 0 - режим просмотра
      */
     private void changeEditMode(int mode) {
-        if (BuildConfig.DEBUG) {
-            Log.d(TAG, "changeEditMode");
-        }
-        mFab.setImageResource(R.drawable.ic_done_black_24dp);
         if (mode == 1) {
-            for (EditText userValue : mUserInfoViews) {
-                userValue.setEnabled(true);
-                userValue.setFocusable(true);
-                userValue.setFocusableInTouchMode(true);
-                showProfilePlaceholder();
-                lockToolbar();
-                mCollapsingToolbar.setExpandedTitleColor(Color.TRANSPARENT);
-            }
+            mCurrentProfileImage = mDataManager.getPreferencesManager().loadUserPhoto();
+
+            mFab.setImageResource(R.drawable.ic_done_black_24dp);
+
+            ButterKnife.apply(mUserFields, EDIT_TEXT_ENABLED, true);
+
+            showProfilePlaceholder();
+            lockToolbar();
+            mCollapsingToolbar.setExpandedTitleColor(Color.TRANSPARENT);
+
+            focusToEditText(mUserPhone);
+
+            mCurrentEditMode = 1;
         } else {
             mFab.setImageResource(R.drawable.ic_create_black_24dp);
-            for (EditText userValue : mUserInfoViews) {
-                userValue.setEnabled(false);
-                userValue.setFocusable(false);
-                userValue.setFocusableInTouchMode(false);
-                hideProfilePlaceholder();
-                unlockToolbar();
-                mCollapsingToolbar.setExpandedTitleColor(getResources().getColor(R.color.white));
 
+            ButterKnife.apply(mUserFields, EDIT_TEXT_ENABLED, false);
 
-                                       // TODO: 10.07.2016 ДУМАТЬ И ДЕЛАТЬ!!!!
-                                               // saveUserFields(UserModelRes userModel);
+            hideProfilePlaceholder();
+            unlockToolbar();
+            mCollapsingToolbar.setExpandedTitleColor(getResources().getColor(R.color.white));
+
+            saveUserFields();
+
+            if (mSelectedImage != null && !mSelectedImage.equals(mCurrentProfileImage)) {
+                sendPhotoToServer();
+                mCurrentProfileImage = mSelectedImage;
+            }
+
+            mCurrentEditMode = 0;
+        }
+    }
+
+    private void sendPhotoToServer() {
+        String userId = mDataManager.getPreferencesManager().getUserId();
+
+        File file = MediaStoreFileHelper.getFileByUri(this, mSelectedImage);
+        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("photo", file.getName(), requestFile);
+
+        if (NetworkStatusChecker.isNetworkAvailable(this)) {
+            Call<ResponseBody> call = mDataManager.uploadPhoto(userId, body);
+            call.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    if (response.code() == 200) {
+                        showSnackbar("Фото сохранено на сайте");
+                    } else {
+                        showSnackbar("Фото сохранить на сайте не удалось");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    showSnackbar("Ошибка: " + t.getMessage());
+                }
+            });
+        } else {
+            showSnackbar("Сеть на данный момент недоступна, попробуйте позже");
+        }
+
+        return;
+    }
+
+    private void initUserFields() {
+        List<String> userData = mDataManager.getPreferencesManager().loadUserProfileData();
+        for (int i = 0; i < userData.size(); i++) {
+            mUserFields.get(i).setText(userData.get(i));
+        }
+    }
+
+    private void saveUserFields() {
+        List<String> userData = new ArrayList<>();
+        for (EditText userFieldView : mUserFields) {
+            userData.add(userFieldView.getText().toString());
+        }
+        mDataManager.getPreferencesManager().saveUserProfileData(userData);
+    }
+
+    private void initUserInfoValue() {
+        List<String> userData = mDataManager.getPreferencesManager().loadUserProfileValues();
+        for (int i = 0; i < userData.size(); i++) {
+            mUserValueViews.get(i).setText(userData.get(i));
+        }
+    }
+
+    private void loadPhotoFromGallery() {
+        Intent takeGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        takeGalleryIntent.setType("image/*");
+        startActivityForResult(Intent.createChooser(takeGalleryIntent, getString(R.string.user_profile_chose_message)), ConstantManager.REQUEST_GALLERY_PICTURE);
+    }
+
+    private void loadPhotoFromCamera() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            Intent takeCaptureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+            try {
+                mPhotoFile = createImageFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (mPhotoFile != null) {
+                takeCaptureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mPhotoFile));
+                startActivityForResult(takeCaptureIntent, ConstantManager.REQUEST_CAMERA_PICTURE);
+            }
+        } else {
+            ActivityCompat.requestPermissions(this, new String[] {
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+            }, ConstantManager.CAMERA_REQUEST_PERMISSION_CODE);
+
+            Snackbar.make(mCoordinatorLayout, R.string.error_permission_need, Snackbar.LENGTH_LONG)
+                    .setAction(R.string.approve, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            openApplicationSettings();
+                        }
+                    }).show();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == ConstantManager.CAMERA_REQUEST_PERMISSION_CODE && grantResults.length == 2) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                loadPhotoFromCamera();
             }
         }
     }
 
-/**
- * подгрузка клиентских данных из списка массива
- */
-
-           private void initUserFields() {
-        List<String> userData = mDataManager.getPreferenceManager().loadUserProfileData();
-        for (int i = 0; i < userData.size(); i++) {
-        mUserInfoViews.get(i).setText(userData.get(i));
-        }
-        }
-
-            private void initUserName() {
-                List<String> userData = mDataManager.getPreferenceManager().loadUserNameProfile();
-                mUserInfoApp.get(0).setText(userData.get(0));
-                mUserInfoApp.get(1).setText(userData.get(2));
-            }
-
-            private void initUserInfoValue() {
-                List<String> userData = mDataManager.getPreferenceManager().loadUserProfileValues();
-                for (int i = 0; i < userData.size(); i++) {
-                    mUserValueViews.get(i).setText(userData.get(i));
-                }
-            }
-
-
-private void setupDrawer() {
-        if (BuildConfig.DEBUG) {
-
-                  Log.d(TAG, "setupDrawer1");
-        }
-        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-@Override
-public boolean onNavigationItemSelected(MenuItem item) {
-        showSnackbar(item.getTitle().toString());
-        item.setChecked(true);
-        mNavigationDrawer.closeDrawer(GravityCompat.START);
-        return false;
-        }
-
-        });
-        }
-
-/**
- * Получение результатов из другой Activity (фото из камеры или галереии)
- *
- * @param requestCode
- * @param resultCode
- * @param data
- */
-@Override
-protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (BuildConfig.DEBUG) {
-        Log.d(TAG, "onActivityResult");
-        }
-        switch (requestCode) {
-        case ConstantManager.REQUEST_GALLERY_PICTURE:
-        if (resultCode == RESULT_OK && data != null) {
-        mSelectedImage = data.getData();
-        insertProfileImage(mSelectedImage);
-        }
-        break;
-        case ConstantManager.REQUEST_CAMERA_PICTURE:
-        if (resultCode == RESULT_OK && mPhotoFile != null) {
-        mSelectedImage = Uri.fromFile(mPhotoFile);
-        insertProfileImage(mSelectedImage);
-        }
-        break;
-        }
-        }
-
-/**
- * Активация отрисовки меню слева
- *
- * @param item
- * @return
- */
-@Override
-public boolean onOptionsItemSelected(MenuItem item) {
-        if (BuildConfig.DEBUG) {
-        Log.d(TAG, "onOptionsItemSelected");
-        }
-        if (item.getItemId() == android.R.id.home) {
-        mNavigationDrawer.openDrawer(GravityCompat.START);
-        mFlag = true;
-                    mAppName = (TextView) findViewById(R.id.user_name_txt);
-                    mAppEmail = (TextView) findViewById(R.id.user_email_txt);
-                    mUserInfoApp = new ArrayList<>();
-                    mUserInfoApp.add(mAppName);
-                    mUserInfoApp.add(mAppEmail);
-                    initUserName();
-        }
-        circleDraw();
-        return super.onOptionsItemSelected(item);
-        }
-
-/**
- * перегрузка метода нажатия кнопки назад. при нажатии в случае открытого меню, меню скрывается.
- */
-@Override
-public void onBackPressed() {
-        if (BuildConfig.DEBUG) {
-        Log.d(TAG, "onBackPressed");
-        }
-
-        if (mFlag == true) {
-        mFlag = false;
-        mNavigationDrawer.closeDrawer(GravityCompat.START);
-        } else {
-        super.onBackPressed();
-        }
-        }
-
-/**
- * округление аватара при помощи внешнего пакета
- */
-private void circleDraw() {
-        if (BuildConfig.DEBUG) {
-        Log.d(TAG, "circleDraw");
-        }
-        BitmapDrawable bImage = (BitmapDrawable) getResources().getDrawable(R.drawable.avatar);
-        ImageRounded RondedAvatarImg = new ImageRounded(bImage.getBitmap());
-        Bitmap bImageRwonded = RondedAvatarImg.getBitmap();
-
-                mUserAvatarImg = (ImageView) findViewById(R.id.new_user_avatar);
-                mUserAvatarImg.setImageDrawable(new ImageRounded(bImage.getBitmap()));
-
-                Picasso.with(this)
-                        .load(mDataManager.getPreferenceManager().loadUserAvatar())
-                        .placeholder(R.drawable.avatar)
-                        .transform(new CircleTransform())
-                        .into(mUserAvatarImg);
-        }
-
-/**
- * загрузка фото из галереи
- */
-private void loadPhotoFromGallery() {
-        if (BuildConfig.DEBUG) {
-        Log.d(TAG, "loadPhotoFromGallery");
-        }
-        Intent takeGalleryIntent = new Intent(Intent.ACTION_PICK,
-        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        takeGalleryIntent.setType("image/*");
-        startActivityForResult(Intent.createChooser(takeGalleryIntent,
-        getString(R.string.user_profile_chose_message)),
-        ConstantManager.REQUEST_GALLERY_PICTURE);
-        }
-
-/**
- * получение фото с камеры
- */
-private void loadPhotoFromCamera() {
-        if (BuildConfig.DEBUG) {
-        Log.d(TAG, "loadPhotoFromCamera");
-        }
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
-        && ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-        Intent takeCaptureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        try {
-        mPhotoFile = createImageFile();
-        } catch (IOException e) {
-        e.printStackTrace();
-
-                        showSnackbar("Устройство не готово, повторите попытку");
-        Picasso.with(this)
-        .load(mDataManager.getPreferenceManager().loadUserPhoto())
-        .placeholder(R.drawable.user_foto)
-        .into(mProfileImage);
-        }
-        if (mPhotoFile != null) {
-        takeCaptureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-        Uri.fromFile(mPhotoFile));
-        startActivityForResult(takeCaptureIntent,
-        ConstantManager.REQUEST_CAMERA_PICTURE);
-        }
-        } else {
-        ActivityCompat.requestPermissions(this, new String[]{
-        android.Manifest.permission.CAMERA,
-        android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-        }, ConstantManager.CAMERA_REQUEST_PERMISSION_CODE);
-
-        Snackbar.make(mCoordinatorLayout, "Для корректной работы приложения необходимо дать требуемые разрешения", Snackbar.LENGTH_LONG)
-        .setAction("Разрешить", new View.OnClickListener() {
-@Override
-public void onClick(View v) {
-        openApplicationSettings();
-        }
-        }).show();
-        }
-        }
-
-/**
- * проверка наличия разрешений на работу с камерой для  API 23
- *
- * @param requestCode
- * @param permissions
- * @param grantResults
- */
-@Override
-public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (BuildConfig.DEBUG) {
-        Log.d(TAG, "onRequestPermissionsResult");
-        }
-        if (requestCode == ConstantManager.CAMERA_REQUEST_PERMISSION_CODE && grantResults.length == 2) {
-        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                        showSnackbar("Разрешение на работу с камерой - получено");
-        }
-        }
-        if (grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-
-                    showSnackbar("Разрешения получены");
-        }
-        }
-
-private void hideProfilePlaceholder() {
-        if (BuildConfig.DEBUG) {
-        Log.d(TAG, "hideProfilePlaceholder");
-        }
+    private void hideProfilePlaceholder() {
         mProfilePlaceholder.setVisibility(View.GONE);
-        }
+    }
 
-private void showProfilePlaceholder() {
-        if (BuildConfig.DEBUG) {
-        Log.d(TAG, "showProfilePlaceholder");
-        }
+    private void showProfilePlaceholder() {
         mProfilePlaceholder.setVisibility(View.VISIBLE);
-        }
+    }
 
-/**
- * блокировка тулбара при редактировании клиентских данных
- */
-private void lockToolbar() {
-        if (BuildConfig.DEBUG) {
-        Log.d(TAG, "lockToolbar");
-        }
+    private void lockToolbar() {
         mAppBarLayout.setExpanded(true, true);
         mAppBarParams.setScrollFlags(0);
         mCollapsingToolbar.setLayoutParams(mAppBarParams);
-        }
+    }
 
-/**
- * разблокировка тулбара после редактировании клиентских данных
- */
-private void unlockToolbar() {
-        if (BuildConfig.DEBUG) {
-        Log.d(TAG, "unlockToolbar");
-        }
+    private void unlockToolbar() {
         mAppBarParams.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
         mCollapsingToolbar.setLayoutParams(mAppBarParams);
-        }
+    }
 
-/**
- * формирование диалога при клике на minimap делания снимка
- *
- * @param id идентификатор нажатой кнопки
- * @return на выходе само меню из 3х пунктов
- */
-@Override
-protected Dialog onCreateDialog(int id) {
-        if (BuildConfig.DEBUG) {
-        Log.d(TAG, "onCreateDialog");
-        }
+    @Override
+    protected Dialog onCreateDialog(int id) {
         switch (id) {
-        case ConstantManager.LOAD_PROFILE_PHOTO:
-        String[] selectItem = {getString(R.string.user_profile_dialog_gallery), getString(R.string.user_profile_dialog_camera), getString(R.string.user_profile_dialog_cancel)};
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.user_profile_dialog_title));
-        builder.setItems(selectItem, new DialogInterface.OnClickListener() {
-@Override
-public void onClick(DialogInterface dialog, int choiceItem) {
-        switch (choiceItem) {
-        case 0:
-        loadPhotoFromGallery();
-        break;
-        case 1:
-        loadPhotoFromCamera();
-        break;
-        case 2:
-        dialog.cancel();
-        }
-        }
-        });
-        return builder.create();
-default:
-        return null;
-        }
-        }
+            case ConstantManager.LOAD_PROFILE_PHOTO:
+                String[] selectItems = {getString(R.string.user_profile_dialog_gallery), getString(R.string.user_profile_dialog_camera), getString(R.string.user_profile_dialog_cancel)};
 
-/**
- * формирование фото файла полученного с фотоаппатара и его сохранение в каталог
- *
- * @return фозвращается ссылка на файл
- */
-private File createImageFile() throws IOException {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(getString(R.string.user_profile_dialog_title));
+                builder.setItems(selectItems, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int choiceItem) {
+                        switch (choiceItem) {
+                            case 0:
+                                loadPhotoFromGallery();
+                                //showSnackbar("Галлерея");
+                                break;
 
-        if (BuildConfig.DEBUG) {
-        Log.d(TAG, "createImageFile");
+                            case 1:
+                                loadPhotoFromCamera();
+                                //showSnackbar("Камера");
+                                break;
+
+                            case 3:
+                                dialog.cancel();
+                                //showSnackbar("Отмена");
+                                break;
+                        }
+                    }
+                });
+                return builder.create();
+
+            default:
+                return null;
         }
+    }
+
+    private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        if (!storageDir.exists()) {
+            storageDir.mkdir();
+        }
         File image = File.createTempFile(imageFileName, ".jpg", storageDir);
 
+        // передача файла в галлерею
         ContentValues values = new ContentValues();
         values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis());
         values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
-        values.put(MediaStore.MediaColumns.DATA, image.getAbsolutePath());
-     this.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+        values.put(MediaStore.Images.Media.DATA, image.getAbsolutePath());
+
+        getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
         return image;
-        }
+    }
 
-/**
- * установка фото в профиль
- *
- * @param selectedImage содержит устанавливаемую фото
- */
-private void insertProfileImage(Uri selectedImage) {
-        if (BuildConfig.DEBUG) {
-        Log.d(TAG, "insertProfileImage");
-        }
+    private void insertProfileImage(Uri selectedImage) {
         Picasso.with(this)
-        .load(selectedImage)
+                .load(selectedImage)
+                .resize(getResources().getDimensionPixelSize(R.dimen.profile_image_size),
+                        getResources().getDimensionPixelSize(R.dimen.profile_image_size))
                 .centerCrop()
-        .into(mProfileImage);
+                .placeholder(R.drawable.user_foto)
+                .into(mProfileImage);
+    }
 
-        mDataManager.getPreferenceManager().saveUserPhoto(selectedImage);
-        }
+    private void insertDrawerAvatar(Uri selectedImage) {
+        Picasso.with(this)
+                .load(selectedImage)
+                .resize(getResources().getDimensionPixelSize(R.dimen.drawer_header_avatar_size),
+                        getResources().getDimensionPixelSize(R.dimen.drawer_header_avatar_size))
+                .centerCrop()
+                .transform(new RoundedImageTransformation())
+                .placeholder(R.drawable.avatar)
+                .into(drawerUsrAvatar);
+    }
 
-/**
- * открытие окна настроек разрешений
- */
-private void openApplicationSettings() {
-        if (BuildConfig.DEBUG) {
-        Log.d(TAG, "openApplicationSettings");
-        }
-        Intent appSettingsIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-        Uri.parse("package:" + getPackageName()));
+    private void openApplicationSettings() {
+        Intent appSettingsIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + getPackageName()));
 
-        startActivityForResult(appSettingsIntent,
-        ConstantManager.PERMISSION_REQUEST_SETTINGS_CODE);
-        }
+        startActivityForResult(appSettingsIntent, ConstantManager.PERMISSION_REQUEST_SETTINGS_CODE);
+    }
 
-/**
- * вызов интента для набора номера телефона
- */
-private void call() {
-        if (BuildConfig.DEBUG) {
-        Log.d(TAG, "call");
-        }
-        try {
+    // Set focus on phone field, set cursor to the end field, popup soft keyboard
+    private void focusToEditText(EditText editText) {
+        editText.requestFocus();
+        editText.setSelection(editText.getText().length());
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(editText, 0);
+    }
 
-        Uri number = Uri.parse("tel:" + mDataManager.getPreferenceManager().getUserPhone());
-        Intent callIntent = new Intent(Intent.ACTION_DIAL, number);
-        startActivity(callIntent);
-        } catch (ActivityNotFoundException e) {
-        e.printStackTrace();
+    private void loadVkUserInfo() {
+        // Prepare request
+        VKRequest request = VKApi.users().get(VKParameters.from(VKApiConst.FIELDS, "contacts, screen_name, site, about, photo_max_orig"));
 
-                    showSnackbar("На устройстве отсутствует Приложение для совершения вызовов");
-        }
-        }
+        // Send request
+        request.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
 
+                // Processing response
+                VKList vkList = (VKList) response.parsedModel;
+                VKApiUserFull vkApiUserFull = (VKApiUserFull) vkList.get(0);
 
-/**
- * Вызов интента для формированияписьма на отправку
- */
-private void sendEmail() {
-        if (BuildConfig.DEBUG) {
-        Log.d(TAG, "sendEmail");
-        }
-        try {
-        Intent emailIntent = new Intent(Intent.ACTION_SEND);
-        emailIntent.setType("text/plain");
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{mDataManager.getPreferenceManager().getUserMail()});
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "DevIntensive automatic send");
-        emailIntent.putExtra(Intent.EXTRA_TEXT, "Hi! This test message from new APP");
-        startActivity(emailIntent);
-        } catch (ActivityNotFoundException e) {
-        e.printStackTrace();
+                List<String> userField = new ArrayList<>();
+                userField.add(vkApiUserFull.fields.optString("mobile_phone", ""));
+                userField.add("");
+                userField.add("vk.com/" + vkApiUserFull.fields.optString("screen_name", ""));
+                userField.add(vkApiUserFull.fields.optString("site", ""));
+                userField.add(vkApiUserFull.fields.optString("about", ""));
 
-                    showSnackbar("На устройстве отсутствует Приложение для отправки e-mail");
-        }
-        }
+                mDataManager.getPreferencesManager().saveUserPhoto(Uri.parse(vkApiUserFull.fields.optString("photo_max_orig", "")));
+                mDataManager.getPreferencesManager().saveUserFullName(vkApiUserFull.toString());
+                mDataManager.getPreferencesManager().saveUserProfileData(userField);
 
-/**
- * Вызов интента для отображения странички с vk
- */
-private void vkView() {
-        if (BuildConfig.DEBUG) {
-        Log.d(TAG, "vkView");
-        }
-        try {
-        Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://" + mDataManager.getPreferenceManager().getUserVK()));
-        startActivity(webIntent);
-        } catch (ActivityNotFoundException e) {
-        e.printStackTrace();
+                finish();
+                startActivity(getIntent());
+            }
+            @Override
+            public void onError(VKError error) {
 
-                    showSnackbar("На устройстве отсутствует Приложение для webсерфинга");
-        }
-        }
+                showSnackbar("Данные не получены: " + error.toString()
+                );
+            }
+            @Override
+            public void attemptFailed(VKRequest request, int attemptNumber, int totalAttempts) {
 
-/**
- * Вызов интента для отображения странички с github
- */
-private void gitHubView() {
-        if (BuildConfig.DEBUG) {
-        Log.d(TAG, "gitHubView");
-        }
-        try {
-        Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://" + mDataManager.getPreferenceManager().getUserGit()));
-        startActivity(webIntent);
-        } catch (ActivityNotFoundException e) {
-        e.printStackTrace();
-                    showToast("На устройстве отсутствует Приложение для webсерфинга");
-                    showSnackbar("На устройстве отсутствует Приложение для webсерфинга");
-        }
-        }
-
-
-        }
-
+            }
+        });
+    }
+}

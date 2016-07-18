@@ -11,7 +11,5 @@ public class UserLoginReq {
     public UserLoginReq(String email, String password) {
         this.email = email;
         this.password = password;
-
-
     }
 }

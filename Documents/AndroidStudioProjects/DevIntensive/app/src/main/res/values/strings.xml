@@ -1,154 +1,55 @@
 <resources>
+    <integer name="com_vk_sdk_AppId">53343443</integer>
     <string name="app_name">Aleksandr Andreichenko</string>
-    <string name="hint_phone">Mobile handy</string>
-    <string name="hint_email">E-mail</string>
-    <string name="hint_github">Repository</string>
-    <string name="hint_vk">Profile in vk</string>
-    <string name="hint_about_me">Uber sich</string>
-    <string name="text_phone">+4(3324)212-820-22</string>
-    <string name="text_email">andreichenko@dmail.de</string>
-    <string name="text_github">github.com/name/DevIntensive</string>
-    <string name="text_vk">vk.com/andrejtschenko</string>
-    <string name="text_about_me">About you//Uber sich schrieben bitte wenige text.Guten Tag, herzlich willkommen in meinem Android app. Ich wuensche ihnen einen
+
+    <!-- Page info -->
+
+    <string name="contacts_mobile">Mobile handy</string>
+    <string name="header_code_strings">geschrieben Codezeilen</string>
+    <string name="header_rating">Rating</string>
+    <string name="contacts_email">E-mail</string>
+    <string name="contacts_repo">Repository</string>
+    <string name="header_projects">Projekt</string>
+    <string name="contacts_vk">Profile in vk</string>
+    <string name="contacts_about">Uber sich</string>
+    <string name="contacts_mobile_vol">+4(3324)212-820-22</string>
+    <string name="contacts_email_vol">andreichenko@dmail.de</string>
+    <string name="contacts_repo_vol">github.com/name/DevIntensive</string>
+    <string name="contacts_vk_vol">vk.com/andrejtschenko</string>
+    <string name="contacts_about_vol">About you//Uber sich schrieben bitte wenige text.Guten Tag, herzlich willkommen in meinem Android app. Ich wuensche ihnen einen
     wunderscheonen Tag. Immer Ihr. Alex</string>
 
-    <string name="auth.title.input">ВОЙТИ</string>
-    <string name="auth.title.forgot_pass">Забыли пароль?</string>
-    <string name="auth.hint.e_mail">E-mail</string>
-    <string name="auth.hint.pass">Пароль</string>
-    <string name="activity_main.title.change_profile_photo">Изменить фотографию профиля</string>
-    <string name="dialog.selection.load_from_galery">Загрузить из галереи</string>
-    <string name="dialog.selection.take_photo">Сделать снимок</string>
-    <string name="dialog.selection.cancel">Отменить</string>
-    <string name="dialog.title.change_photo">Изменить фотографию профиля</string>
-    <string name="dialog.title.select_picture">Выберите фото</string>
-    <string name="snackbar.message.need_take_permissions">Необходимо дать требуемые разрешения</string>
-    <string name="main_activity_error_not_found_call_app">Не найдено приложение для звонка</string>
-    <string name="main_activity.error.not_found_email_app">Не найдено приложения для отправки email</string>
-    <string name="main_activity_error_not_found_vk_app">Не найдено приложения для открытия страницы VK</string>
-    <string name="main_activity_error_not_found_git_app">Не найдено приложения для открытия репозитория</string>
-    <string name="user_profile.invalidate.number">Неверный формат номера телефона</string>
-    <string name="user_profile.invalidate.email">Неверный формат email адреса</string>
-    <string name="user_profile.invalidate.vk">Неверный формат адреса VK</string>
-    <string name="user_profile.invalidate.github">Неверный формат ссылки на GitHub</string>
-    <string name="auth.error.incor_login_or_pass">Неверный логин или пароль</string>
-    <string name="auth.error.error_message">Произошла ошибка</string>
-    <string name="auth.error.available_net">Ошибка сети</string>
-    <string name="auth.login.login_empty">Введите имя пользователя</string>
-    <string name="auth.password.password_empty">Введите пароль</string>
+    <!-- Seite autorization und Textinformation-->
+
+    <string name="user_profile.placeholder.image">Änderung Foto</string>
+    <string name="user_profile.dialog.gallery">Lade ein Foto</string>
+    <string name="user_profile.dialog.camera">Machen Foto</string>
+    <string name="user_profile.dialog.cancel">Abbrechen</string>
+    <string name="user_profile.dialog.title">Änderung Foto Profile</string>
+    <string name="user_profile.chose.message">Wahlen Sie Foto</string>
+    <string name="menu_my_profile">Meine Profile</string>
+    <string name="menu_team">Mannschaft</string>
+    <string name="menu_login">Login</string>
+    <string name="drawer_header_user_name">Aleksandr Andreichenko</string>
+    <string name="drawer_header_user_email">meine@demail.de</string>
+    <string name="auth_enter_txt">LOGIN</string>
+
+    <!-- Text und Information -->
+
+    <string name="auth_email_txt">Schreiben Email</string>
+    <string name="auth_pass_txt">Schreiben Sie bitte Passwort</string>
+    <string name="auth_pass_forget_txt">Passwort vergessen?</string>
+    <string name="error_correct_profile">Bitte, korrekte Profilfehler</string>
+    <string name="error_permission_need">Sie müssen Berechtigung geben</string>
+    <string name="approve">Lassen</string>
+    <string name="menu_login_vk">Login mit vk profile</string>
+
+    <!-- tempory text volumes -->
+    <string name="header_rating_vol">18</string>
+    <string name="header_code_strings_vol">6274</string>
+    <string name="header_projects_vol">1</string>
 
 
-    <string name="activity_main.title.rating_textview">Рейтинг</string>
-    <string name="activity_main.title.code_strings_textview">Написано строк кода</string>
-    <string name="activity_main.title.projects_textview">Проектов</string>
-
-    <string name="activity_main.title.mobile_textview">Мобильный</string>
-    <string name="activity_main.title.email_textview">E-mail</string>
-    <string name="activity_main.title.vk_textview">Профиль в VK</string>
-    <string name="activity_main.title.github_textbiew">Репозиторий</string>
-    <string name="activity_main.title.about_textbiew">О себе</string>
-
-    <string name="drawer_menu.title.user_profile">Мой профиль</string>
-    <string name="drawer_menu.title.team">Команда</string>
-
-
-    <!--EditText's hints-->
-    <string name="hint_mobile">Мобильный</string>
-
-    <string name="hint_about">О себе</string>
-    <string name="hint_login">EMAIL</string>
-    <string name="hint_password">Пароль</string>
-
-    <!--EditText mask-->
-    <string name="mask_phone">Маска для номера +х ххх ххх-хх-хх</string>
-    <string name="mask_mail">Маска для адреса xxx@xx.xx</string>
-    <string name="mask_vk">Маска для адреса vk.com/xxx</string>
-    <string name="mask_git">Маска для адреса github.com/xxx</string>
-
-    <!--Drawable menu-->
-    <string name="menu_my_profile">Мой профиль</string>
-    <string name="menu_my_contacts">Контакты</string>
-    <string name="menu_exit">Выход</string>
-
-    <!--Временный текст для информации-->
-    <string name="my_profile_name">Коропенко Дмитрий</string>
-    <string name="my_profile_mail">nikotin13@mail.ru</string>
-
-
-    <!--Работа с загрузкой фото для аватара-->
-    <string name="avatar_load">Загрузите фотографию профиля</string>
-    <string name="avatar_load_from_gallary">Загрузить из галареи</string>
-    <string name="avatar_load_from_camera">Сфотографировать</string>
-    <string name="avatar_cancel">Отмена</string>
-    <string name="select_img">Выберите фото</string>
-
-    <!--Работа с intent-->
-    <string name="intent_error_open_message">Извините, невозможно открыть приложение</string>
-    <string name="intent_need_permission">Для работы необходимо дать разрешения</string>
-
-    <!--Экран входа-->
-    <string name="login_forgot_password">Забыли пароль</string>
-    <string name="login_btn">Войти</string>
-    <string name="login_header_text">ВОЙТИ</string>
-
-    <!--Ошибки при валидации введенных данных-->
-    <string name="error_user_phone_message">Некорректный номер</string>
-    <string name="error_user_mail_message">Некорректный E-mail.</string>
-    <string name="error_user_vk_message">Некорректный адрес страницы ВК.</string>
-    <string name="error_user_github_message">Некорректный адрес git аккаунта.</string>
-    <string name="error_wrong_user_or_password">Неверный логин или пароль</string>
-    <string name="error_server_not_response">Сервер недоступен</string>
-    <string name="error_magic">Неизвестная ошибка</string>
-    <string name="synch_photo">Фото синхронизировано с сервером</string>
-    <string name="error_synch_photo">Ошибка синхронизации фотографии. Попробуйте позднее</string>
-
-
-    <string name="ff_medium">sans-serif-medium</string>
-    <string name="ff_regular">sans-serif</string>
-
-    <!--<string name="app_name">Alexandr Andreichenko</string>-->
-
-    <string name="profile.user_info.rate.dummy">12</string>
-    <string name="profile.user_info.rate.hint">Rating</string>
-    <string name="profile.user_info.code_lines.dummy">3321</string>
-    <string name="profile.user_info.code_lines.hint">geschrieben Codezeilen</string>
-    <string name="profile.user_info.project.dummy">42</string>
-    <string name="profile.user_info.project.hint">Project</string>
-
-    <string name="profile.phone.dummy">+49-157-14**8927</string>
-    <string name="profile.phone.hint">Mobile handy</string>
-    <string name="profile.vk.hint">Profile in VK</string>
-    <string name="profile.vk.dummy">vk.com/andrejtschenko</string>
-    <string name="profile.mail.hint">E-mail</string>
-    <string name="profile.mail.dummy">rsn_alex@mail.ru</string>
-    <string name="profile.git.dummy">github.com/Andreichenko/DevIntensive</string>
-    <string name="profile.git.hint">Quelle</string>
-<string name="profile.bio.dummy">About you//Uber sich schrieben bitte wenige text.Guten Tag, herzlich willkommen in meinem Android app. Ich wuensche ihnen einen
-    wunderscheonen Tag. Immer Ihr. Alex</string>
-    <string name="profile.bio.hint"> Uber sich </string>
-
-    <string name="user_profile.placeholder.image">Изменить фотографию профиля</string>
-    <string name="user_profile.dialog.gallery">загрузить из галереии</string>
-    <string name="user_profile.dialog.camera">сделать снимок</string>
-    <string name="user_profile.dialog.cancel">отмена</string>
-    <string name="user_profile.dialog.title">изменить фотографию профиля</string>
-    <string name="user_profile.chose.message">выберите фото</string>
-
-    <string name="auth.authorization_enter">Войти</string>
-    <string name="auth.email">Ведите e-mail</string>
-    <string name="auth.password">Ведите пароль</string>
-    <string name="auth.login">Войти</string>
-    <string name="auth.remember">забыли пароль?</string>
-    <string name="txt_https">https://</string>
-
-    <string name="menu_profile">Мой профиль</string>
-    <string name="menu_comand">Команда</string>
-    +
-    +
-    <string name="view_btn">Просмотр</string>
-    +
-    +
-    <string name="user_full_name">Фамилия Имя</string>
 </resources>
 
 
