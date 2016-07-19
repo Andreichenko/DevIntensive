@@ -3,4 +3,26 @@
 
     <dimen name="fab_right_space">16dp</dimen>
     <dimen name="fab_left_space">32dp</dimen>
+
+    <!-- Theme -->
+
+    <!-- <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">-->
+        <!-- Custom -->
+
+    <!--  <item name="colorAccent">@color/color_accent</item>
+      <item name="colorPrimaryDark">@color/color_primary_dark</item>
+
+      <item name="colorPrimary">@color/color_primary</item>
+
+      EditText bottom line disabled mode
+
+      <item name="colorControlNormal">@color/white</item>
+      <item name="android:colorButtonNormal">@color/color_accent</item>
+      <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+      <item name="android:windowTranslucentStatus">true</item>
+      <item name="android:statusBarColor">@color/color_accent</item>
+
+
+
+    </style>-->
 </resources>

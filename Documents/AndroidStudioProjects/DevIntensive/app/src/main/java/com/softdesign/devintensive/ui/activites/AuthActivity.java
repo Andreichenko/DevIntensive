@@ -75,19 +75,19 @@ public class AuthActivity extends BaseActivity {
                     if (response.code() == 200) {
                         loginSuccess(response.body());
                     } else if (response.code() == 404) {
-                        showSnackbar("Неверный логин или пароль");
+                        showSnackbar("Benutzername oder Passwort falsch");
                     } else {
-                        showSnackbar("Всё пропало Шеф!!!");
+                        showSnackbar("Service nicht verfügbar");
                     }
                 }
 
                 @Override
                 public void onFailure(Call<UserModelRes> call, Throwable t) {
-                    showSnackbar("Ошибка: " + t.getMessage());
+                    showSnackbar("Fehler: " + t.getMessage());
                 }
             });
         } else {
-            showSnackbar("Сеть на данный момент недоступна, попробуйте позже");
+            showSnackbar("Netzwerk nicht verfügbar ist, versuchen Sie es später noch einmal");
         }
     }
 
