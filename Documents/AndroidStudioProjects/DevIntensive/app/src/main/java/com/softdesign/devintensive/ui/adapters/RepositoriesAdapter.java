@@ -52,6 +52,7 @@ public class RepositoriesAdapter extends BaseAdapter {
         repoName.setText(mRepoList.get(position));
 
         return itemView;
+
     }
 }
 

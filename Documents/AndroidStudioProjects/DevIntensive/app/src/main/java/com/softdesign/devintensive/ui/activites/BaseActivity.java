@@ -25,7 +25,7 @@ public class BaseActivity extends AppCompatActivity {
 
                     }
                  mProgressDialog.show();
-                 mProgressDialog.setContentView(R.layout.progress_splash);
+                 mProgressDialog.setContentView(R.layout.progress_circle);
             }
 
                 public void hideProgress() {
@@ -36,6 +36,25 @@ public class BaseActivity extends AppCompatActivity {
                         }
                     }
                 }
+                public void showSplash() {
+                   if (mProgressDialog == null) {
+                            mProgressDialog = new ProgressDialog(this, R.style.custom_dialog);
+                            mProgressDialog.setCancelable(false);
+
+        }
+
+                         mProgressDialog.show();
+                         mProgressDialog.setContentView(R.layout.splash_screen);
+    }
+
+                 public void hideSplash() {
+                     if (mProgressDialog != null) {
+                           if (mProgressDialog.isShowing()) {
+                                      mProgressDialog.hide();
+                                      mProgressDialog.dismiss();
+            }
+        }
+    }
 
                 public void showError(String message, Exception error) {
                 showToast(message);

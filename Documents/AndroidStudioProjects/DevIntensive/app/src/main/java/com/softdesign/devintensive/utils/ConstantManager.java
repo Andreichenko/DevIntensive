@@ -25,6 +25,9 @@ public interface ConstantManager {
 
     String PARCELABLE_KEY = "PARCELABLE_KEY";
 
+    String SORT_CRITERIA = "SORT_CRITERIA";
+    int SEARCH_DELAY = 1500;
+
     int LOAD_PROFILE_PHOTO = 1;
     int REQUEST_CAMERA_PICTURE = 99;
     int REQUEST_GALLERY_PICTURE = 88;

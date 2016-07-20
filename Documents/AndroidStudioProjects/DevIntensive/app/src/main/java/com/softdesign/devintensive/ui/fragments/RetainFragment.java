@@ -3,15 +3,16 @@ package com.softdesign.devintensive.ui.fragments;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
-import com.softdesign.devintensive.data.network.res.UserListRes;
+import com.softdesign.devintensive.data.storage.models.User;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by AlexFrei on 19.07.16.
  */
 public class RetainFragment extends Fragment {
-    private ArrayList<UserListRes.UserData> mUsersList;
+
+    private List<User> mUsersList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -20,10 +21,12 @@ public class RetainFragment extends Fragment {
         setRetainInstance(true);
     }
 
-    public ArrayList<UserListRes.UserData> getUsersList() {
+
+    public List<User> getUsersList() {
         return mUsersList;
     }
-    public void setUsersList(ArrayList<UserListRes.UserData> usersList) {
+
+    public void setUsersList(List<User> usersList) {
         mUsersList = usersList;
     }
 }

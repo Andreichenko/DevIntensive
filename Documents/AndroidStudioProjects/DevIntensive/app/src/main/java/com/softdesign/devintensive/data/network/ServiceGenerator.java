@@ -28,13 +28,12 @@ public class ServiceGenerator {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
-        httpClient.connectTimeout(AppConfig.MAX_CONNECT_TIMEOUT, TimeUnit.MILLISECONDS);
-        httpClient.readTimeout(AppConfig.MAX_READ_TIMEOUT, TimeUnit.MILLISECONDS);
-        httpClient.addNetworkInterceptor(new StethoInterceptor());
-        httpClient.cache(new Cache(DevIntensiveApplication.getContext().getCacheDir(), Integer.MAX_VALUE));
-
         httpClient.addInterceptor(new HeaderInterceptor());
         httpClient.addInterceptor(logging);
+        httpClient.connectTimeout(AppConfig.MAX_CONNECT_TIMEOUT, TimeUnit.MILLISECONDS);
+        httpClient.readTimeout(AppConfig.MAX_READ_TIMEOUT, TimeUnit.MILLISECONDS);
+        httpClient.cache(new Cache(DevIntensiveApplication.getContext().getCacheDir(), Integer.MAX_VALUE));
+        httpClient.addNetworkInterceptor(new StethoInterceptor());
 
         Retrofit retrofit = sBuilder
                 .client(httpClient.build())

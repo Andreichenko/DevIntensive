@@ -58,5 +58,6 @@ public class HeaderBehavior extends CoordinatorLayout.Behavior<ViewGroup> {
         styledAttributes.recycle();
 
         return actionBarSize;
+
     }
 }

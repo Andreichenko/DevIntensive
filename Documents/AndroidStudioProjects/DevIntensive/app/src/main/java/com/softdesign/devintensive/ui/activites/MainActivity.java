@@ -364,7 +364,7 @@ public class MainActivity extends BaseActivity {
                     @Override
                     public void onError(VKError error) {
                         //  ошибка авторизации
-                        showSnackbar("Авторизация не удалась: " + error.toString());
+                        showSnackbar("Berechtigungsfehler: " + error.toString());
                     }
                 })) {
             super.onActivityResult(requestCode, resultCode, data);
@@ -424,19 +424,19 @@ public class MainActivity extends BaseActivity {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     if (response.code() == 200) {
-                        showSnackbar("Фото сохранено на сайте");
+                        showSnackbar("Foto speichern auf eine Seite");
                     } else {
-                        showSnackbar("Фото сохранить на сайте не удалось");
+                        showSnackbar("Foto speichern nicht gemacht");
                     }
                 }
 
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    showSnackbar("Ошибка: " + t.getMessage());
+                    showSnackbar("Fehler: " + t.getMessage());
                 }
             });
         } else {
-            showSnackbar("Сеть на данный момент недоступна, попробуйте позже");
+            showSnackbar("Netzwerk derzeit nicht verfügbar");
         }
 
         return;
@@ -589,8 +589,7 @@ public class MainActivity extends BaseActivity {
     private void insertProfileImage(Uri selectedImage) {
         Picasso.with(this)
                 .load(selectedImage)
-                .resize(getResources().getDimensionPixelSize(R.dimen.profile_image_size),
-                        getResources().getDimensionPixelSize(R.dimen.profile_image_size))
+                .fit()
                 .centerCrop()
                 .placeholder(R.drawable.user_foto)
                 .into(mProfileImage);
@@ -599,8 +598,7 @@ public class MainActivity extends BaseActivity {
     private void insertDrawerAvatar(Uri selectedImage) {
         Picasso.with(this)
                 .load(selectedImage)
-                .resize(getResources().getDimensionPixelSize(R.dimen.drawer_header_avatar_size),
-                        getResources().getDimensionPixelSize(R.dimen.drawer_header_avatar_size))
+                .fit()
                 .centerCrop()
                 .transform(new RoundedImageTransformation())
                 .placeholder(R.drawable.avatar)
@@ -651,7 +649,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onError(VKError error) {
 
-                showSnackbar("Данные не получены: " + error.toString()
+                showSnackbar("Keine Information: " + error.toString()
                 );
             }
             @Override

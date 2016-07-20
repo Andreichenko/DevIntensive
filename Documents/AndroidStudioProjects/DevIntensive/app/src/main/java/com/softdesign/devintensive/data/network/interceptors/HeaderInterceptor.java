@@ -22,7 +22,7 @@ public class HeaderInterceptor implements Interceptor {
                 .header("X-Access-Token", pm.getAuthToken())
                 .header("Request-User-Id", pm.getUserId())
                 .header("User-Agent", "DevIntensiveApp")
-                .header("Cache-Control", "max-age=" + (30 * 20 * 24));;
+                .header("Cache-Control", "max-age=" + (60 * 60 * 24));
 
         Request request = requestBuilder.build();
         return chain.proceed(request);
