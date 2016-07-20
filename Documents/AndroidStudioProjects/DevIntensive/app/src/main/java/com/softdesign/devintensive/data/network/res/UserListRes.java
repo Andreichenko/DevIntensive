@@ -50,6 +50,7 @@ private boolean success;
         @SerializedName("updated")
         @Expose
         private String updated;
+        public String getId() {return id;}
 
         public UserModelRes.Repositories getRepositories() {
             return repositories;
