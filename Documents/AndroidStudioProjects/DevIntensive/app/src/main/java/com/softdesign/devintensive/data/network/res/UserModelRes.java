@@ -248,6 +248,7 @@ public class UserModelRes {
 
     public class Contacts {
 
+
         @SerializedName("vk")
         @Expose
         private String vk;

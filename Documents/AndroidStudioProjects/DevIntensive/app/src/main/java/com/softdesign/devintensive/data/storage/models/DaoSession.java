@@ -35,6 +35,7 @@ public class DaoSession extends AbstractDaoSession {
 
     public DaoSession(Database db, IdentityScopeType type, Map<Class<? extends AbstractDao<?, ?>>, DaoConfig>
             daoConfigMap) {
+
         super(db);
 
         repositoryDaoConfig = daoConfigMap.get(RepositoryDao.class).clone();

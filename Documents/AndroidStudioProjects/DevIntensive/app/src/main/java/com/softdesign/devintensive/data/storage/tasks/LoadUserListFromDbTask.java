@@ -48,8 +48,10 @@ public class LoadUserListFromDbTask extends ChronosOperation<List<User>> {
                 default:
                     result = new ArrayList<>();
                     break;
+
             }
         }
+
 
         return result;
     }

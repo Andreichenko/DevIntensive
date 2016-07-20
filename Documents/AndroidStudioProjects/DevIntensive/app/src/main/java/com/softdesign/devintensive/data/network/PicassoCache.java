@@ -11,6 +11,7 @@ import com.squareup.picasso.Picasso;
 public class PicassoCache {
     private Picasso mPicassoInstance;
     private Context mContext;
+
     public PicassoCache(Context context){
         mContext = context;
         OkHttp3Downloader okHttp3Downloader = new OkHttp3Downloader(context, Integer.MAX_VALUE);

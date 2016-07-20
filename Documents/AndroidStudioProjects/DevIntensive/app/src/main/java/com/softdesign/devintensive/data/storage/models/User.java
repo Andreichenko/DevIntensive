@@ -60,6 +60,7 @@ public class User {
         codeLines = userRes.getProfileValues().getLinesCode();
         projects = userRes.getProfileValues().getProjects();
         bio = userRes.getPublicInfo().getBio();
+
     }
 
     /**

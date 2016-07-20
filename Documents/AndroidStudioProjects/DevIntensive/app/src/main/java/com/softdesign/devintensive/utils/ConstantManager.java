@@ -25,6 +25,8 @@ public interface ConstantManager {
 
     String PARCELABLE_KEY = "PARCELABLE_KEY";
 
+
+
     String SORT_CRITERIA = "SORT_CRITERIA";
     int SEARCH_DELAY = 1500;
 

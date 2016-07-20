@@ -51,6 +51,8 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
         final User user = mUsers.get(position);
         final String userPhoto;
         if (user.getPhoto().isEmpty()) {
+
+
             userPhoto = "null";
             Log.e(TAG, "onBindViewHolder: user with name " + user.getFullName() + " has empty name");
         } else {

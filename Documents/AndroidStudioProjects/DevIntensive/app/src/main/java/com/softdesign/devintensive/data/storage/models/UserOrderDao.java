@@ -118,7 +118,9 @@ public class UserOrderDao extends AbstractDao<UserOrder, Long> {
     protected final Long updateKeyAfterInsert(UserOrder entity, long rowId) {
         entity.setId(rowId);
         return rowId;
+
     }
+
     
     @Override
     public Long getKey(UserOrder entity) {

@@ -108,5 +108,6 @@ public class UserOrder {
 
     @Generated(hash = 1552988665)
     public UserOrder() {
+
     }
 }

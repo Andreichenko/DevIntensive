@@ -154,6 +154,7 @@
 
         </LinearLayout>
 
+
         <include layout="@layout/user_profile_content"/>
 
         <android.support.design.widget.FloatingActionButton

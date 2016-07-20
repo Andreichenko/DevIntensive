@@ -110,6 +110,7 @@ public class    PreferencesManager {
 
     public String getUserId() {
         return mSharedPreferences.getString(ConstantManager.USER_ID_KEY, "");
+
     }
 
     public void saveUserFullName(String userFullName) {
@@ -117,6 +118,7 @@ public class    PreferencesManager {
         editor.putString(ConstantManager.USER_FULL_NAME_KEY, userFullName);
         editor.apply();
     }
+
 
     public String getUserFullName() {
         return mSharedPreferences.getString(ConstantManager.USER_FULL_NAME_KEY, "");

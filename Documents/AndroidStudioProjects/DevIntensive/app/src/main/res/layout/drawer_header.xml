@@ -9,6 +9,8 @@
                 android:paddingTop="@dimen/spacing_medial_24">
 <!-- Header -->
 
+
+
     <ImageView android:id="@+id/drawer_avatar_img"
     android:layout_width="@dimen/drawer_header_avatar_size"
     android:layout_height="@dimen/drawer_header_avatar_size"

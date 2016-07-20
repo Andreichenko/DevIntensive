@@ -93,6 +93,9 @@ public class AuthActivity extends BaseActivity {
         hideSplash();
         hideProgress();
 
+
+
+
         switch (event.message) {
             case NETWORK_NOT_AVAILABLE:
                 startUserMainActivity();

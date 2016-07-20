@@ -24,6 +24,7 @@ public class HeaderInterceptor implements Interceptor {
                 .header("User-Agent", "DevIntensiveApp")
                 .header("Cache-Control", "max-age=" + (60 * 60 * 24));
 
+
         Request request = requestBuilder.build();
         return chain.proceed(request);
     }

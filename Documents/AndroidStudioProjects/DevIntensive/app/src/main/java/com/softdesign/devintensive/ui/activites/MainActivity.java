@@ -371,6 +371,9 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+
+
+
     /**
      * переключает режим редактирования
      *

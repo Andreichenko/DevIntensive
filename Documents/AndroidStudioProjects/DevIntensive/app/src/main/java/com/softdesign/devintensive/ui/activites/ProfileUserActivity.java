@@ -62,6 +62,9 @@ public class ProfileUserActivity extends BaseActivity {
         initProfileData();
     }
 
+
+
+
     private void setupToolBar() {
         setSupportActionBar(mToolbar);
         ActionBar actionBar = getSupportActionBar();

@@ -23,6 +23,7 @@ public class ServiceGenerator {
             .baseUrl(AppConfig.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create());
 
+
     public static <S> S createService(Class<S> serviceClass) {
 
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
