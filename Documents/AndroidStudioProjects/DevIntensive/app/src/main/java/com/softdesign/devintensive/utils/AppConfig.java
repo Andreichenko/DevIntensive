@@ -8,4 +8,6 @@ public interface AppConfig {
     long MAX_CONNECT_TIMEOUT = 5000;
     long MAX_READ_TIMEOUT = 5000;
     int START_DELAY = 3000;
+
+
 }

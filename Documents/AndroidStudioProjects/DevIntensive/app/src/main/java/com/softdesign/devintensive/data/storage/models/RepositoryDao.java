@@ -40,6 +40,7 @@ public class RepositoryDao extends AbstractDao<Repository, Long> {
     }
     
     public RepositoryDao(DaoConfig config, DaoSession daoSession) {
+
         super(config, daoSession);
         this.daoSession = daoSession;
     }

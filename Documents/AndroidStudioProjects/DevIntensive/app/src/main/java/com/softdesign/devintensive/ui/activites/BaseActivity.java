@@ -36,6 +36,8 @@ public class BaseActivity extends AppCompatActivity {
                         }
                     }
                 }
+
+
                 public void showSplash() {
                    if (mProgressDialog == null) {
                             mProgressDialog = new ProgressDialog(this, R.style.custom_dialog);

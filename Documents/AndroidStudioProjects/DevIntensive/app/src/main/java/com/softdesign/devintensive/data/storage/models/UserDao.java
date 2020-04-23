@@ -122,7 +122,9 @@ public class UserDao extends AbstractDao<User, Long> {
     protected final void attachEntity(User entity) {
         super.attachEntity(entity);
         entity.__setDaoSession(daoSession);
+
     }
+
 
     @Override
     public Long readKey(Cursor cursor, int offset) {

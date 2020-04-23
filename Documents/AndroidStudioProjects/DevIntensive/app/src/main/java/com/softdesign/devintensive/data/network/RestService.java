@@ -23,7 +23,6 @@ import okhttp3.MultipartBody;
 public interface RestService {
 
 
-
         @POST("login")
         Call<UserModelRes> loginUser(@Body UserLoginReq req);
 

@@ -38,6 +38,7 @@ public class Repository {
      */
     @Generated(hash = 1942392019)
     public void refresh() {
+
         if (myDao == null) {
             throw new DaoException("Entity is detached from DAO context");
         }

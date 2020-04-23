@@ -18,6 +18,8 @@ public class RoundedImageTransformation implements Transformation {
 
 
     public static Bitmap getRoundedBitmap(Bitmap bitmap) {
+
+
         final Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
         final Canvas canvas = new Canvas(output);
         final int color = Color.RED;

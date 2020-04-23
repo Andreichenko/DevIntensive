@@ -77,6 +77,7 @@ private boolean success;
 
             if (firstName != null ? !firstName.equals(userData.firstName) : userData.firstName != null)
                 return false;
+
             return secondName != null ? secondName.equals(userData.secondName) : userData.secondName == null;
 
         }

@@ -33,6 +33,8 @@ public class DevIntensiveApplication extends Application {
         }
     };
 
+
+
     @Override
     public void onCreate() {
         super.onCreate();

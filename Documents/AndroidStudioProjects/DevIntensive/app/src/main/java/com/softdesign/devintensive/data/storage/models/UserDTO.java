@@ -72,6 +72,8 @@ public class UserDTO implements Parcelable {
         } else {
             dest.writeByte((byte) (0x01));
             dest.writeList(mRepositories);
+
+
         }
     }
 

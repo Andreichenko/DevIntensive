@@ -20,6 +20,8 @@ public class MediaStoreFileHelper {
             return new File(contentUri.getPath());
         }
 
+
+
         try {
             String[] mediaData = {MediaStore.Images.Media.DATA};
             cursor = context.getContentResolver().query(contentUri,  mediaData, null, null, null);

@@ -24,6 +24,7 @@ public class DaoMaster extends AbstractDaoMaster {
         RepositoryDao.createTable(db, ifNotExists);
         UserDao.createTable(db, ifNotExists);
         UserOrderDao.createTable(db, ifNotExists);
+
     }
 
     /** Drops underlying database table using DAOs. */
@@ -69,6 +70,7 @@ public class DaoMaster extends AbstractDaoMaster {
         public OpenHelper(Context context, String name) {
             super(context, name, SCHEMA_VERSION);
         }
+
 
         public OpenHelper(Context context, String name, CursorFactory factory) {
             super(context, name, factory, SCHEMA_VERSION);
